@@ -1,10 +1,10 @@
-### Max
+Max
 
-### Adrian
+Adrian
 
-### Jeff
+Jeff
 - worked on job application package
 
-### Aryan
+Aryan
 
-### Ty
+Ty
