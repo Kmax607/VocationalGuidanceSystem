@@ -10,7 +10,7 @@ public class ProfileView {
     public void displayProfile(){
 
     }
-    public void refreshProfileData()[
+    public void refreshProfileData(){
         
-    ]
+    }
 }
