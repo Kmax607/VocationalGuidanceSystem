@@ -1,4 +1,5 @@
 #### Max
+-Worked on Job Searching management and profile management
 
 #### Adrian
 - Worked on Job Posting Management package
