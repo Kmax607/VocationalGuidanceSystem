@@ -1,4 +1,4 @@
 package JobSearchingManagement.View;
 
-public class class1 {
+public interface SearchInterface {
 }
