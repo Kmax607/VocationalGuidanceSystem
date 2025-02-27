@@ -6,5 +6,5 @@
 - worked on job application package
 
 #### Aryan
-
+- Worked on Authentication Managment Package and Profile Management Package
 #### Ty
