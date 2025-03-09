@@ -1,5 +1,5 @@
 #### Max
--Worked on Job Searching management and profile management
+-Worked on Authentication Management package and added tests to testHarness
 
 #### Adrian
 - Worked on Job Posting Management package
