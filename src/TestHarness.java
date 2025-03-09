@@ -4,6 +4,9 @@ import JobApplicationManagement.Model.Application;
 import JobApplicationManagement.Model.PreviousApplications;
 import JobPostingManagement.Controller.PostController;
 import JobPostingManagement.Model.JobPost;
+import JobSearchingManagement.Controller.SearchController;
+import JobSearchingManagement.Model.JobListing;
+import JobSearchingManagement.View.JobView;
 
 import java.io.File;
 import java.util.ArrayList;
