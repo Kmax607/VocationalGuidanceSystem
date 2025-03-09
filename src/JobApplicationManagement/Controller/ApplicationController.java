@@ -2,25 +2,40 @@ package JobApplicationManagement.Controller;
 
 import JobApplicationManagement.Model.Application;
 import JobApplicationManagement.Model.PreviousApplications;
+import JobPostingManagement.Model.JobPost;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Scanner;
 
 public class ApplicationController {
     Application application;
-    static PreviousApplications previousApplications;
+    PreviousApplications previousApplications;
+    Scanner scan = new Scanner(System.in);
 
-    public ApplicationController(Application application) {
-        this.application = application;
-        PreviousApplications previousApplications = new PreviousApplications(new ArrayList<Application>());
+    public ApplicationController(PreviousApplications previousApplications) {
+        this.previousApplications = previousApplications;
     }
 
 
-    public static void submitApplication(int applicationID, int postID, String jobPostingTitle, File resume, ArrayList<String> questions, ArrayList<String> questionResponses, Date dateCompleted, boolean accepted, boolean denied) {
-        Application application = new Application(applicationID, postID, jobPostingTitle, resume, questions, questionResponses, dateCompleted, accepted, denied);
+    public void submitApplication(Application application, JobPost post) {
+        post.addApplication(application);
         previousApplications.addApplication(application);
     }
 
+    public void acceptApplication(Application application) {
+        application.setAccepted();
+    }
+
+    public void denyApplication(Application application) {
+        application.setDenied();
+    }
+
+    public File uploadResume(int choice) {
+        File resume = new File("src/resume.txt");
+        return resume;
+    }
 
 }

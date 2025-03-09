@@ -1,5 +1,10 @@
 package JobPostingManagement.Model;
 
+import JobApplicationManagement.Model.Application;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class JobPost {
     static String postID;
     String jobTitle;
@@ -9,6 +14,8 @@ public class JobPost {
     String company;
     String location;
     double salary;
+
+    ArrayList<Application> applications = new ArrayList<>();
 
 //    public JobPost JobPostRepo;
 //}
@@ -41,4 +48,18 @@ public class JobPost {
     }
     //*IMPORTANT NOTE*
     //This is a basic getter and setter for this attribute. It's the same structure for every single attribute
+
+    public void addApplication(Application application) {
+        applications.add(application);
+    }
+
+    public void getApplications() {
+        for (int i = 0; i < applications.size(); i++) {
+            System.out.println(applications.get(i));
+        }
+    }
+
+    public String getJobTitle() {
+        return jobTitle;
+    }
 }

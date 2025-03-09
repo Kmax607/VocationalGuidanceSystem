@@ -3,10 +3,9 @@ package JobApplicationManagement.Model;
 import java.util.ArrayList;
 
 public class PreviousApplications {
-    ArrayList<Application> applicationsSent;
+    ArrayList<Application> applicationsSent = new ArrayList<>();
 
-    public PreviousApplications(ArrayList<Application> applicationsSent) {
-        this.applicationsSent = applicationsSent;
+    public PreviousApplications() {
     }
 
     public void addApplication(Application application) {

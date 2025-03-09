@@ -3,7 +3,7 @@
 #### Adrian
 - Updated Job Posting Management and Implemented tests for Job Posting to TestHarness
 #### Jeff
-- worked on job application package
+- worked on job application package and added testing for Application Management
 #### Aryan
 - Worked on Authentication Managment Package and Profile Management Package
 #### Ty
