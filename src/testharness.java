@@ -4,12 +4,14 @@ import AuthenticationManagement.*;
 
 public class TestHarness {
 
-  
+  // Main method
     public static void main(String[] args) {
+      
         System.out.println("Initializing Test Harness...");
 
         LoginController loginController = new LoginController();
 
+        // Authentication Management Tests:
         // Registering a new user test
         User newUser = new User("kmax", "Max Kraus", "password123", "max@mail.com", null, "regular");
         boolean registrationSuccess = loginController.registerUser(newUser);
@@ -26,5 +28,9 @@ public class TestHarness {
         // Logout Test
         loginController.logoutUser();
         System.out.println("Test: Logout PASSED");
+        // Ednd of authentication management tests
+
+
+      
     }
 }
