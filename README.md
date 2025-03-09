@@ -5,6 +5,6 @@
 #### Jeff
 - worked on job application package and added testing for Application Management
 #### Aryan
-- Worked on Authentication Managment Package and Profile Management Package
+- Worked on Authentication Management Package and Profile Management Package
 #### Ty
 -Worked on Job searching management
