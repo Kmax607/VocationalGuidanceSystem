@@ -21,7 +21,7 @@ public class JobPostRepo {
                 return job;
             }
         }
-        return null; // Not found
+        return null;
     }
 
     public boolean addJobPost(JobPost jobPost) {
