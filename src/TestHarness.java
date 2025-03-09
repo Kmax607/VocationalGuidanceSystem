@@ -30,6 +30,8 @@ public class TestHarness {
         System.out.println("Test: Logout PASSED");
         // Ednd of authentication management tests
 
+        
+
         //Job Posting Tests:
         //New Job Post
         JobPost newPost = new JobPost("001", "Systems Analyst","Job Description for a Systems Analyst",
