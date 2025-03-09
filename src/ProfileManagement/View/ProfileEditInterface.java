@@ -1,27 +1,32 @@
 package ProfileManagement.View;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProfileEditInterface {
 
     public void showEditScreen(){
+        System.out.println("Displaying edit screen:");
 
     }
     public String getUpdatedDescription(){
-            return null;
+        return "Description updated";
 
     }
     public File getUpdatedResume(){
-            return null;
+        return new File("updated_resume.pdf");
 
     }
     public List<String> getUpdatedSkills(){
-            return null;
+        ArrayList<String> skills = new ArrayList<>();
+        skills.add("Team Management");
+        skills.add("Figma Design");
+        return skills;
 
     }
     public File getUpdatedPicture(){
-            return null;
+        return new File("updated_picture.png");
 
     }
 }

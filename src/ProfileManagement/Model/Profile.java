@@ -50,4 +50,3 @@ public void setPicture(File picture) {
     this.picture = picture;
 }
 }
-
