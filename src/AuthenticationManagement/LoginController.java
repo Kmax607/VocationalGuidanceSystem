@@ -12,7 +12,7 @@ public class LoginController {
     public boolean validateLogin(String username, String password) {
         System.out.println("Validating login for user: " + username);
         
-        // Simulating a successful login for "testUser"
+        // Simulating a successful login for the testUser
         if (username.equals("testUser") && password.equals("password123")) {
             currentUser = new User(username, "Test User", password, "test@example.com", null, "regular");
             System.out.println("Login successful!");
@@ -35,7 +35,7 @@ public class LoginController {
     public boolean registerUser(User newUser) {
         System.out.println("Registering new user: " + newUser.getUsername());
 
-        // Simulating a successful registration
+        // Successful registration
         if (!newUser.getUsername().isEmpty() && !newUser.getPassword().isEmpty()) {
             System.out.println("Registration successful for: " + newUser.getUsername());
             return true;
