@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JobPostRepo {
-    public List<JobPost> jobPosts = new ArrayList<>();
+    public static List<JobPost> jobPosts = new ArrayList<>();
     public JobPostRepo repo;
     public Post jobPostView;
 
@@ -15,11 +15,25 @@ public class JobPostRepo {
         this.jobPostView = new Post();
     }
 
-    public void addJobPost(JobPost jobPost) {
+    public static JobPost getJobById(String id) {
+        for (JobPost job : jobPosts) {
+            if (job.postID().equals(id)) {
+                return job;
+            }
+        }
+        return null; // Not found
+    }
+
+    public boolean addJobPost(JobPost jobPost) {
         jobPosts.add(jobPost);
+        return false;
     }
 
     public void deleteJobPost(JobPost jobPost) {
         jobPosts.remove(jobPost);
+    }
+
+    public List<JobPost> getAllJobs() {
+        return jobPosts;
     }
 }

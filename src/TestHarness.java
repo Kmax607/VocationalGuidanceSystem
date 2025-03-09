@@ -1,6 +1,6 @@
-package TestHarness;
-
 import AuthenticationManagement.*;
+import JobPostingManagement.Controller.PostController;
+import JobPostingManagement.Model.JobPost;
 
 public class TestHarness {
 
@@ -29,6 +29,21 @@ public class TestHarness {
         loginController.logoutUser();
         System.out.println("Test: Logout PASSED");
         // Ednd of authentication management tests
+
+        //Job Posting Tests:
+        //New Job Post
+        JobPost newPost = new JobPost("001", "Systems Analyst","Job Description for a Systems Analyst",
+                "John Doe", "3/9/2025", "Eaton", "Harrisburg, PA", 50000.00);
+        boolean jobCreated = JobPostingManagement.Controller.PostController.createJobPost(newPost);
+        System.out.println("Test: Job Post Created " + (jobCreated ? "PASSED" : "FAILED"));
+
+        //Find Specific Job Post
+        JobPost retrievePost = PostController.getPostID(newPost.postID());
+        System.out.println("Test: Retrieving Post " + (retrievePost != null ? "PASSED" : "FAILED"));
+
+        //Full Job Repo List
+        boolean jobListStatus = !PostController.getAllJobPosts().isEmpty();
+        System.out.println("Test: Job List Status: " + (jobListStatus ? "PASSED" : "FAILED"));
 
 
       

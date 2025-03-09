@@ -1,7 +1,7 @@
 package JobPostingManagement.Model;
 
 public class JobPost {
-    String postID;
+    static String postID;
     String jobTitle;
     String postDescription;
     String recruiter;
@@ -24,12 +24,20 @@ public class JobPost {
         this.salary = salary;
     }
 
-    public String getPostID() {
+    public static String getPostID() {
+        return postID;
+    }
+
+    public String postID() {
         return postID;
     }
 
     public void setPostID(String postID) {
         this.postID = postID;
+    }
+
+    public static JobPost getPostID(String id) {
+        return JobPostRepo.getJobById(id);
     }
     //*IMPORTANT NOTE*
     //This is a basic getter and setter for this attribute. It's the same structure for every single attribute
