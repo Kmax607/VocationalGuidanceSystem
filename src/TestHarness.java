@@ -137,19 +137,19 @@ public class TestHarness {
 
         // Test 1: Display all jobs
         System.out.println("Test 1: Display all jobs");
-        searchController.displayAllJobs();
+        searchController.getAllJobs();
 
         // Test 2: Search for jobs containing "Engineer"
         System.out.println("\nTest 2: Search for jobs containing 'Engineer'");
-        searchController.displaySearchResults("Engineer");
+        searchController.searchJobs("Engineer");
 
         // Test 3: Search for jobs containing "Remote"
         System.out.println("\nTest 3: Search for jobs containing 'Remote'");
-        searchController.displaySearchResults("Remote");
+        searchController.searchJobs("Remote");
 
         // Test 4: Search for jobs containing "Unknown"
         System.out.println("\nTest 4: Search for jobs containing 'Unknown'");
-        searchController.displaySearchResults("Unknown");
+        searchController.searchJobs("Unknown");
 
         // Close the scanner
         scan.close();
