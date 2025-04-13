@@ -14,10 +14,8 @@ public class LoginController {
     public boolean validateLogin(String username, String password) {
         System.out.println("Validating login for user: " + username);
 
-        // Simulating a successful login for the testUser
-        if (username.equals("testUser") && password.equals("password123")) {
-            currentUser = new User(username, "First Name","Last Name", password, "test@example.com", null, "regular");
-            System.out.println("Login successful!");
+        if (UserRepository.validateUser(username, password)) {
+            System.out.println("Login Successful!");
             return true;
         }
 

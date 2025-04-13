@@ -2,63 +2,106 @@ package AuthenticationManagement;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
 import java.util.Date;
 
 public class LoginInterface extends JFrame {
 
-    private JTextField usernameField = new JTextField(15);
-    private JTextField firstNameField = new JTextField(15);
-    private JTextField lastNameField = new JTextField(15);
-    private JTextField emailField = new JTextField(15);
-    private JTextField dobField = new JTextField(15); // Format: yyyy-mm-dd
-    private JPasswordField passwordField = new JPasswordField(15);
-    private JTextField userTypeField = new JTextField(15);
-    private JButton registerButton = new JButton("Register");
+    private CardLayout cardLayout = new CardLayout();
+    private JPanel mainPanel = new JPanel(cardLayout);
 
     private LoginController controller;
 
     public LoginInterface() {
-        setTitle("User Registration");
+        setTitle("Authentication");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(500, 500);
-        setLayout(new GridLayout(8, 2, 10, 10));
+        setSize(500, 400);
+        setLocationRelativeTo(null);
 
-        add(new JLabel("Username:")); add(usernameField);
-        add(new JLabel("First Name:")); add(firstNameField);
-        add(new JLabel("Last Name:")); add(lastNameField);
-        add(new JLabel("Email:")); add(emailField);
-        add(new JLabel("Date of Birth (yyyy-mm-dd):")); add(dobField);
-        add(new JLabel("Password:")); add(passwordField);
-        add(new JLabel("User Type:")); add(userTypeField);
-        add(new JLabel("")); add(registerButton);
-
-        registerButton.addActionListener(e -> registerUser());
         controller = new LoginController(this);
 
-        setLocationRelativeTo(null);
+        mainPanel.add(buildRegisterPanel(), "register");
+        mainPanel.add(buildLoginPanel(), "login");
+
+        add(mainPanel);
+        cardLayout.show(mainPanel, "register");
         setVisible(true);
     }
 
-    private void registerUser() {
-        try {
-            String username = usernameField.getText();
-            String firstName = firstNameField.getText();
-            String lastName = lastNameField.getText();
-            String email = emailField.getText();
-            String password = new String(passwordField.getPassword());
-            String userType = userTypeField.getText();
-            Date dob = java.sql.Date.valueOf(dobField.getText()); // yyyy-mm-dd
+    private JPanel buildRegisterPanel() {
+        JPanel panel = new JPanel(new GridLayout(9, 2, 10, 10));
 
-            User user = new User(username, firstName, lastName, password, email, dob, userType);
-            controller.registerUser(user);
+        JTextField usernameField = new JTextField(15);
+        JTextField firstNameField = new JTextField(15);
+        JTextField lastNameField = new JTextField(15);
+        JTextField emailField = new JTextField(15);
+        JTextField dobField = new JTextField(15);
+        JPasswordField passwordField = new JPasswordField(15);
+        JTextField userTypeField = new JTextField(15);
+        JButton registerButton = new JButton("Register");
+        JButton switchToLogin = new JButton("Already have an account? Login");
 
-            JOptionPane.showMessageDialog(this, "User registered successfully!");
+        panel.add(new JLabel("Username:")); panel.add(usernameField);
+        panel.add(new JLabel("First Name:")); panel.add(firstNameField);
+        panel.add(new JLabel("Last Name:")); panel.add(lastNameField);
+        panel.add(new JLabel("Email:")); panel.add(emailField);
+        panel.add(new JLabel("Date of Birth (yyyy-mm-dd):")); panel.add(dobField);
+        panel.add(new JLabel("Password:")); panel.add(passwordField);
+        panel.add(new JLabel("User Type:")); panel.add(userTypeField);
+        panel.add(registerButton); panel.add(switchToLogin);
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
-        }
+        registerButton.addActionListener(e -> {
+            try {
+                String username = usernameField.getText();
+                String firstName = firstNameField.getText();
+                String lastName = lastNameField.getText();
+                String email = emailField.getText();
+                String password = new String(passwordField.getPassword());
+                String userType = userTypeField.getText();
+                Date dob = java.sql.Date.valueOf(dobField.getText());
+
+                User user = new User(username, firstName, lastName, password, email, dob, userType);
+                controller.registerUser(user);
+                JOptionPane.showMessageDialog(this, "User registered successfully!");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Registration Error: " + ex.getMessage());
+            }
+        });
+
+        switchToLogin.addActionListener(e -> cardLayout.show(mainPanel, "login"));
+
+        return panel;
+    }
+
+    private JPanel buildLoginPanel() {
+        JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
+
+        JTextField loginUsernameField = new JTextField(15);
+        JPasswordField loginPasswordField = new JPasswordField(15);
+        JButton loginButton = new JButton("Login");
+        JButton switchToRegister = new JButton("Need an account? Register");
+
+        panel.add(new JLabel("Username:")); panel.add(loginUsernameField);
+        panel.add(new JLabel("Password:")); panel.add(loginPasswordField);
+        panel.add(loginButton); panel.add(switchToRegister);
+
+        loginButton.addActionListener((ActionEvent e) -> {
+            String username = loginUsernameField.getText();
+            String password = new String(loginPasswordField.getPassword());
+
+            boolean valid = controller.validateLogin(username, password);
+            if (valid) {
+                JOptionPane.showMessageDialog(this, "Login successful!");
+
+            } else {
+                JOptionPane.showMessageDialog(this, "Login failed. Invalid credentials.");
+            }
+        });
+
+        switchToRegister.addActionListener(e -> cardLayout.show(mainPanel, "register"));
+
+        return panel;
     }
 
     public static void main(String[] args) {
