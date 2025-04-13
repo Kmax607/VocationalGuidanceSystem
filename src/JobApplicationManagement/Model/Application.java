@@ -1,5 +1,7 @@
 package JobApplicationManagement.Model;
 
+import org.bson.Document;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,14 +11,14 @@ public class Application {
     int applicationID;
     int postID;
     String jobPostingTitle;
-    File resume;
+    String resume;
     ArrayList<String> questions;
     ArrayList<String> questionResponses;
     Date dateCompleted;
     boolean accepted;
     boolean denied;
 
-    public Application (int applicationID, int postID, String jobPostingTitle, File resume, ArrayList<String> questions, ArrayList<String> questionResponses, Date dateCompleted, boolean accepted, boolean denied) {
+    public Application (int applicationID, int postID, String jobPostingTitle, String resume, ArrayList<String> questions, ArrayList<String> questionResponses, Date dateCompleted, boolean accepted, boolean denied) {
         this.applicationID = applicationID;
         this.postID = postID;
         this.jobPostingTitle = jobPostingTitle;
@@ -28,6 +30,18 @@ public class Application {
         this.denied = denied;
     }
 
+    public Document toDocument() {
+        return new Document("applicationID", applicationID)
+                .append("postID", postID)
+                .append("jobPostingTitle", jobPostingTitle)
+                .append("resume", resume)
+                .append("questions", questions)
+                .append("questionResponses", questionResponses)
+                .append("dateCompleted", dateCompleted)
+                .append("accepted", accepted)
+                .append("denied", denied);
+    }
+
     public void addQuestion(String question) {
         questions.add(question);
     }
@@ -37,12 +51,6 @@ public class Application {
         questionResponses.add(response);
     }
 
-    public void setResume(File fileName) {
-        File resume = fileName;
-
-        this.resume = resume;
-        // retrieves resume on file or uploads new one
-    }
 
     public void setAccepted() {
         accepted = true;
@@ -56,7 +64,7 @@ public class Application {
         System.out.println("Application ID: " + applicationID);
         System.out.println("Post ID: " + postID);
         System.out.println("Job Posting Title: " + jobPostingTitle);
-        System.out.println("Resume: " + (resume != null ? resume.getName() : "No resume provided"));
+        System.out.println("Resume: " + resume);
         System.out.println("Date Completed: " + dateCompleted);
         System.out.println("Accepted: " + accepted);
         System.out.println("Denied: " + denied);

@@ -1,5 +1,6 @@
 package DatabaseManagement;
 
+import JobApplicationManagement.Model.Application;
 import com.mongodb.client.*;
 import org.bson.Document;
 
@@ -11,18 +12,24 @@ public class Mongo_DB {
 
         try (MongoClient mongoClient = MongoClients.create("mongodb+srv://jeffta1080:y7BctXVKdenQAMOu@vocationalguidance.5ybuj6p.mongodb.net/?retryWrites=true&w=majority&appName=VocationalGuidance")){
 
+            // Testing User Connectivity
             MongoDatabase db = mongoClient.getDatabase("users");
             MongoCollection<Document> usersCollection = db.getCollection("users");
 
             FindIterable<Document> users = usersCollection.find();
 
-            int count = 0;
             for (Document user: users) {
-                if (count > 10) {
-                    break;
-                }
-                System.out.println("User's name: " + user.get("first_name") + " " + user.get("last_name"));
-                count++;
+                System.out.println(user.toJson());
+            }
+
+            // Testing JobPost Connectivity
+            MongoDatabase db2 = mongoClient.getDatabase("jobposts");
+            MongoCollection<Document> jobPostsCollection = db2.getCollection("jobposts");
+
+            FindIterable<Document> jobPosts = jobPostsCollection.find();
+
+            for (Document post : jobPosts) {
+                System.out.println(post.toJson());
             }
 
         } catch(Exception e) {

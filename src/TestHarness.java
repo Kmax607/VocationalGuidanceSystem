@@ -98,7 +98,7 @@ public class TestHarness {
                 1,
                 1,
                 newPost.getJobTitle(),
-                resume,
+                "resume",
                 questions,
                 responses,
                 new Date(),
