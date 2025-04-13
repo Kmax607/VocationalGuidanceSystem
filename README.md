@@ -4,7 +4,7 @@
 | 002            | Adrian           |                            |                                                                          |
 | 003            | Max              |                            |                                                                          |
 | 004            | Ayran            |                            |                                                                          |
-| 005            | Ty               |                            |                                                                          |
+| 005            | Ty               | Strategy / Wizard Pattern  |                                                                          |
 
 
 | Team-Member ID | Team-Member Name | Percentage Efforts in Particular Assignment | Brief of Efforts in the Tasks Contribution                                                                                                   |
