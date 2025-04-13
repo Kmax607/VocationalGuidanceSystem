@@ -16,6 +16,7 @@ public class LoginController {
 
         if (UserRepository.validateUser(username, password)) {
             System.out.println("Login Successful!");
+            System.out.println("Username: " + username + "Password: " + password);
             return true;
         }
 
