@@ -1,20 +1,22 @@
 package AuthenticationManagement;
 
+import DatabaseManagement.UserRepository;
+
 public class LoginController {
 
-    private LoginInterface loginInterface;
+    private LoginInterface view;
     private User currentUser;
 
-    public LoginController() {
-        this.loginInterface = new LoginInterface();
+    public LoginController(LoginInterface view) {
+        this.view = view;
     }
 
     public boolean validateLogin(String username, String password) {
         System.out.println("Validating login for user: " + username);
-        
+
         // Simulating a successful login for the testUser
         if (username.equals("testUser") && password.equals("password123")) {
-            currentUser = new User(username, "Test User", password, "test@example.com", null, "regular");
+            currentUser = new User(username, "First Name","Last Name", password, "test@example.com", null, "regular");
             System.out.println("Login successful!");
             return true;
         }
@@ -38,6 +40,8 @@ public class LoginController {
         // Successful registration
         if (!newUser.getUsername().isEmpty() && !newUser.getPassword().isEmpty()) {
             System.out.println("Registration successful for: " + newUser.getUsername());
+
+            UserRepository.insertUser(newUser);
             return true;
         }
 

@@ -16,5 +16,20 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="mongodb-driver-sync-5.4.0" level="project" />
+    <orderEntry type="library" name="bson-5.4.0" level="project" />
+    <orderEntry type="library" name="mongodb-driver-core-5.4.0" level="project" />
+    <orderEntry type="library" name="java-dotenv-5.2.2" level="project" />
+    <orderEntry type="library" name="kotlin-stdlib-0.6.179" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/java-dotenv-5.2.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="kotlin-reflect-2.1.20" level="project" />
   </component>
 </module>
