@@ -1,8 +1,6 @@
 package JobPostingManagement.Model;
 
 import JobApplicationManagement.Model.Application;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class JobPost {

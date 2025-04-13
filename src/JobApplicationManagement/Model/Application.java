@@ -1,13 +1,16 @@
 package JobApplicationManagement.Model;
 
+import JobApplicationManagement.Observer;
+import JobApplicationManagement.Subject;
 import org.bson.Document;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Application {
-
+public class Application implements Subject {
+    private ArrayList<Observer> observers = new ArrayList<>();
+    private String status;
     int applicationID;
     int postID;
     String jobPostingTitle;
@@ -28,6 +31,7 @@ public class Application {
         this.dateCompleted = dateCompleted;
         this.accepted = accepted;
         this.denied = denied;
+        this.status = "";
     }
 
     public Document toDocument() {
@@ -80,4 +84,32 @@ public class Application {
         }
     }
 
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (Observer observer: observers) {
+            observer.update(this);
+        }
+    }
+
+    // when application is denied, notifies observers
+    public void setDenied(boolean denied) {
+        this.denied = denied;
+        notifyObservers();
+    }
+
+    // // when application is accepted, notifies observers
+    public void setAccepted(boolean accepted) {
+        this.accepted = accepted;
+        notifyObservers();
+    }
 }
