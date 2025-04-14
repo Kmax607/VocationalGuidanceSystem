@@ -40,6 +40,8 @@ public class JobPost {
         this.salary = salary;
     }
 
+
+
     public String postID() {
         return postID;
     }

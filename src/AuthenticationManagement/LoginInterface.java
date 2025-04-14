@@ -29,7 +29,10 @@ public class LoginInterface extends JFrame {
     }
 
     private JPanel buildRegisterPanel() {
-        JPanel panel = new JPanel(new GridLayout(9, 2, 10, 10));
+        JPanel panel = new JPanel(new BorderLayout(10, 10));
+
+        JPanel baseFields = new JPanel(new GridLayout(3, 2, 10, 10));
+        JPanel optionalFields = new JPanel(new GridLayout(4, 2, 10, 10));
 
         JTextField usernameField = new JTextField(15);
         JTextField firstNameField = new JTextField(15);
@@ -40,15 +43,25 @@ public class LoginInterface extends JFrame {
         JTextField userTypeField = new JTextField(15);
         JButton registerButton = new JButton("Register");
         JButton switchToLogin = new JButton("Already have an account? Login");
+        JButton moreOptionsButton = new JButton("More Options");
 
-        panel.add(new JLabel("Username:")); panel.add(usernameField);
-        panel.add(new JLabel("First Name:")); panel.add(firstNameField);
-        panel.add(new JLabel("Last Name:")); panel.add(lastNameField);
-        panel.add(new JLabel("Email:")); panel.add(emailField);
-        panel.add(new JLabel("Date of Birth (yyyy-mm-dd):")); panel.add(dobField);
-        panel.add(new JLabel("Password:")); panel.add(passwordField);
-        panel.add(new JLabel("User Type:")); panel.add(userTypeField);
-        panel.add(registerButton); panel.add(switchToLogin);
+        baseFields.add(new JLabel("Username:")); baseFields.add(usernameField);
+        baseFields.add(new JLabel("First Name:")); baseFields.add(firstNameField);
+        baseFields.add(new JLabel("Last Name:")); baseFields.add(lastNameField);
+
+        optionalFields.add(new JLabel("Email:")); optionalFields.add(emailField);
+        optionalFields.add(new JLabel("Date of Birth (yyyy-mm-dd):")); optionalFields.add(dobField);
+        optionalFields.add(new JLabel("User Type:")); optionalFields.add(userTypeField);
+        optionalFields.add(new JLabel("Password:")); optionalFields.add(passwordField);
+        optionalFields.setVisible(false);
+
+        moreOptionsButton.addActionListener(e -> { // 👈 NEW BLOCK
+            optionalFields.setVisible(!optionalFields.isVisible());
+            moreOptionsButton.setText(optionalFields.isVisible() ? "Hide Options" : "More Options");
+            this.revalidate();
+            this.repaint();
+    });
+
 
         registerButton.addActionListener(e -> {
             try {
@@ -68,6 +81,21 @@ public class LoginInterface extends JFrame {
                 JOptionPane.showMessageDialog(this, "Registration Error: " + ex.getMessage());
             }
         });
+
+
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+        buttonPanel.add(registerButton);
+        buttonPanel.add(moreOptionsButton);
+        buttonPanel.add(switchToLogin);
+        panel.add(buttonPanel);
+
+        JPanel combinedPanel = new JPanel();
+        combinedPanel.setLayout(new BoxLayout(combinedPanel, BoxLayout.Y_AXIS));
+        combinedPanel.add(baseFields);
+        combinedPanel.add(optionalFields);
+        combinedPanel.add(buttonPanel);
+
+        panel.add(combinedPanel, BorderLayout.CENTER);
 
         switchToLogin.addActionListener(e -> cardLayout.show(mainPanel, "login"));
 

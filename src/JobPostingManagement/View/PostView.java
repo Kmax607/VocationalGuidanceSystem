@@ -4,7 +4,7 @@ import JobPostingManagement.Model.JobPost;
 
 import javax.swing.*;
 
-public class Post extends JFrame {
+public class PostView extends JFrame {
     public void displayJobPost(JobPost jobPost) {}
 }
 

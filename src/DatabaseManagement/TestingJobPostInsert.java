@@ -2,6 +2,7 @@ package DatabaseManagement;
 
 import JobApplicationManagement.Model.Application;
 import JobPostingManagement.Model.JobPost;
+import JobPostingManagement.Controller.PostController;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -41,6 +42,22 @@ public class TestingJobPostInsert {
                 applications
         );
 
-        JobPostRepository.insertJobPost(dummyJob);
+//        JobPostRepository.insertJobPost(dummyJob);
+
+        PostController postController = new PostController();
+
+        boolean created = PostController.createJobPost(dummyJob);
+        if (created) {
+            System.out.println("Job Post Created through Post Controller");
+        } else {
+            System.out.println("Job Post Creation Failed");
+        }
+
+        boolean validated = postController.validateJobPost("1001");
+        if (validated) {
+            System.out.println("Job Post Validated through Post Controller");
+        } else {
+            System.out.println("Job Post Validation Failed");
+        }
     }
 }

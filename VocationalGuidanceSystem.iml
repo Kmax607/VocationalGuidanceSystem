@@ -31,5 +31,8 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="kotlin-reflect-2.1.20" level="project" />
+    <orderEntry type="library" name="bson-5.4.1" level="project" />
+    <orderEntry type="library" name="mongodb-driver-core-5.4.1" level="project" />
+    <orderEntry type="library" name="mongodb-driver-sync-5.4.1" level="project" />
   </component>
 </module>
