@@ -2,7 +2,7 @@
 |----------------|------------------|----------------------------|--------------------------------------------------------------------------|
 | 001            | Jeff             | Observer / Table Filter    | Observer interface, Subject interface, Application class / JobView class |
 | 002            | Adrian           |                            |                                                                          |
-| 003            | Max              |                            |                                                                          |
+| 003            | Max              | AuthMediator / Input UI    |                                                                          |
 | 004            | Ayran            |                            |                                                                          |
 | 005            | Ty               | Strategy / Wizard Pattern  |                                                                          |
 
