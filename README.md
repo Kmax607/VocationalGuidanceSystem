@@ -2,7 +2,7 @@
 |----------------|------------------|---------------------------------|--------------------------------------------------------------------------------------|
 | 001            | Jeff             | Observer / Table Filter         | Observer interface, Subject interface, Application class / JobView class             |
 | 002            | Adrian           | Facade / Progressive Disclosure | Facade Class, LoginInterface (More Options button, changed panel and button layout). |
-| 003            | Max              | AuthMediator / Input UI         |                                                                                      |
+| 003            | Max              | AuthMediator / Input UI         | AuthMediator.java, LoginInterface.java in AuthenticationManagement|
 | 004            | Ayran            |                                 |                                                                                      |
 | 005            | Ty               | Strategy / Wizard Pattern       |                                                                                      |
 
