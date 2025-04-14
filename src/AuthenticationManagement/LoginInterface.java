@@ -34,13 +34,13 @@ public class LoginInterface extends JFrame {
         JPanel baseFields = new JPanel(new GridLayout(3, 2, 10, 10));
         JPanel optionalFields = new JPanel(new GridLayout(4, 2, 10, 10));
 
-        JTextField usernameField = new JTextField(15);
-        JTextField firstNameField = new JTextField(15);
-        JTextField lastNameField = new JTextField(15);
-        JTextField emailField = new JTextField(15);
-        JTextField dobField = new JTextField(15);
-        JPasswordField passwordField = new JPasswordField(15);
-        JTextField userTypeField = new JTextField(15);
+        JTextField usernameField = new JTextField("Enter your username", 15);
+        JTextField firstNameField = new JTextField("Enter first name", 15);
+        JTextField lastNameField = new JTextField("Enter last name", 15);
+        JTextField emailField = new JTextField("Enter email", 15);
+        JTextField dobField = new JTextField("yyyy-mm-dd", 15);
+        JPasswordField passwordField = new JPasswordField("password", 15);
+        JTextField userTypeField = new JTextField("Enter user type", 15);
         JButton registerButton = new JButton("Register");
         JButton switchToLogin = new JButton("Already have an account? Login");
         JButton moreOptionsButton = new JButton("More Options");
@@ -105,8 +105,8 @@ public class LoginInterface extends JFrame {
     private JPanel buildLoginPanel() {
         JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
 
-        JTextField loginUsernameField = new JTextField(15);
-        JPasswordField loginPasswordField = new JPasswordField(15);
+        JTextField loginUsernameField = new JTextField("Enter your username", 15);
+        JPasswordField loginPasswordField = new JPasswordField("Enter password", 15);
         JButton loginButton = new JButton("Login");
         JButton switchToRegister = new JButton("Need an account? Register");
 
@@ -135,4 +135,4 @@ public class LoginInterface extends JFrame {
     public static void main(String[] args) {
         new LoginInterface();
     }
-}
+} 
