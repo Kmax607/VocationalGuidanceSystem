@@ -16,7 +16,7 @@ public class ConcreteAuthMediator implements AuthMediator {
         if (success) {
             System.out.println("Login successful for: " + username);
         } else {
-            loginInterface.showLoginError("Invalid credentials.");
+           loginInterface.showLoginError("Invalid credentials.");
         }
     }
 

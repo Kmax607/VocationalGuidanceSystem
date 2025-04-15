@@ -135,4 +135,8 @@ public class LoginInterface extends JFrame {
     public static void main(String[] args) {
         new LoginInterface();
     }
-} 
+
+    public void showLoginError(String error) {
+
+    }
+}
