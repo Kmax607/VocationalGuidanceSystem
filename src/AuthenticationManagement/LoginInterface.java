@@ -55,7 +55,7 @@ public class LoginInterface extends JFrame {
         optionalFields.add(new JLabel("Password:")); optionalFields.add(passwordField);
         optionalFields.setVisible(false);
 
-        moreOptionsButton.addActionListener(e -> { // 👈 NEW BLOCK
+        moreOptionsButton.addActionListener(e -> {
             optionalFields.setVisible(!optionalFields.isVisible());
             moreOptionsButton.setText(optionalFields.isVisible() ? "Hide Options" : "More Options");
             this.revalidate();
