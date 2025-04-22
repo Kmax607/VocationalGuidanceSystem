@@ -13,7 +13,7 @@ public class JobPostRepository {
     private static final MongoClient mongoClient = MongoClients.create(uri);
 
     public static void insertJobPost(JobPost post) {
-        try (mongoClient) {
+        try {
             MongoDatabase db = mongoClient.getDatabase("jobposts");
             MongoCollection<Document> jobPostsCollection = db.getCollection("jobposts");
 
@@ -40,8 +40,23 @@ public class JobPostRepository {
         }
     }
 
+    public static boolean validatePost(String postID) {
+        try {
+            MongoDatabase db = mongoClient.getDatabase("jobposts");
+            MongoCollection<Document> jobPostsCollection = db.getCollection("jobposts");
+
+            Document query = new Document("postID", postID);
+            Document foundPost = jobPostsCollection.find(query).first();
+
+            return foundPost != null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public static void getAllJobPosts() {
-        try (mongoClient) {
+        try {
             MongoDatabase db = mongoClient.getDatabase("jobposts");
             MongoCollection<Document> jobPostsCollection = db.getCollection("jobposts");
 

@@ -1,50 +1,50 @@
-package AuthenticationManagement;
+    package AuthenticationManagement;
 
-import DatabaseManagement.UserRepository;
+    import DatabaseManagement.UserRepository;
 
-public class LoginController {
+    public class LoginController {
 
-    private LoginInterface view;
-    private User currentUser;
+        private LoginInterface view;
+        private User currentUser;
 
-    public LoginController(LoginInterface view) {
-        this.view = view;
-    }
-
-    public boolean validateLogin(String username, String password) {
-        System.out.println("Validating login for user: " + username);
-
-        if (UserRepository.validateUser(username, password)) {
-            System.out.println("Login Successful!");
-            System.out.println("Username: " + username + "Password: " + password);
-            return true;
+        public LoginController(LoginInterface view) {
+            this.view = view;
         }
 
-        System.out.println("Login failed. Invalid credentials.");
-        return false;
-    }
+        public boolean validateLogin(String username, String password) {
+            System.out.println("Validating login for user: " + username);
 
-    public void logoutUser() {
-        if (currentUser != null) {
-            System.out.println("Logging out user: " + currentUser.getUsername());
-            currentUser = null;
-        } else {
-            System.out.println("No user is currently logged in.");
-        }
-    }
+            if (UserRepository.validateUser(username, password)) {
+                System.out.println("Login Successful!");
+                System.out.println("Username: " + username + "Password: " + password);
+                return true;
+            }
 
-    public boolean registerUser(User newUser) {
-        System.out.println("Registering new user: " + newUser.getUsername());
-
-        // Successful registration
-        if (!newUser.getUsername().isEmpty() && !newUser.getPassword().isEmpty()) {
-            System.out.println("Registration successful for: " + newUser.getUsername());
-
-            UserRepository.insertUser(newUser);
-            return true;
+            System.out.println("Login failed. Invalid credentials.");
+            return false;
         }
 
-        System.out.println("Registration failed. Missing details.");
-        return false;
+        public void logoutUser() {
+            if (currentUser != null) {
+                System.out.println("Logging out user: " + currentUser.getUsername());
+                currentUser = null;
+            } else {
+                System.out.println("No user is currently logged in.");
+            }
+        }
+
+        public boolean registerUser(User newUser) {
+            System.out.println("Registering new user: " + newUser.getUsername());
+
+            // Successful registration
+            if (!newUser.getUsername().isEmpty() && !newUser.getPassword().isEmpty()) {
+                System.out.println("Registration successful for: " + newUser.getUsername());
+
+                UserRepository.insertUser(newUser);
+                return true;
+            }
+
+            System.out.println("Registration failed. Missing details.");
+            return false;
+        }
     }
-}

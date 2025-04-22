@@ -1,6 +1,6 @@
 package JobPostingManagement.Model;
 
-import JobPostingManagement.View.Post;
+import JobPostingManagement.View.PostView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,11 +8,11 @@ import java.util.List;
 public class JobPostRepo {
     public static List<JobPost> jobPosts = new ArrayList<>();
     public JobPostRepo repo;
-    public Post jobPostView;
+    public PostView jobPostView;
 
     public JobPostRepo() {
         this.jobPosts = new ArrayList<>();
-        this.jobPostView = new Post();
+        this.jobPostView = new PostView();
     }
 
     public static JobPost getJobById(String id) {
