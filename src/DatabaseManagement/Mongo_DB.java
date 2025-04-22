@@ -32,6 +32,9 @@ public class Mongo_DB {
                 System.out.println(post.toJson());
             }
 
+            // Testing Application Connectivity
+            ApplicationRepository.getAllApplications();
+
         } catch(Exception e) {
             e.printStackTrace();
         }

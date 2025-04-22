@@ -102,8 +102,7 @@ public class TestHarness {
                 questions,
                 responses,
                 new Date(),
-                false,
-                false
+                Application.Status.UNDER_CONSIDERATION
         );
 
         System.out.println("This is your application: ");

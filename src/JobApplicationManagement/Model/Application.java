@@ -8,9 +8,15 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 
+
 public class Application implements Subject {
+
+    public enum Status {
+        ACCEPTED,
+        DENIED,
+        UNDER_CONSIDERATION
+    }
     private ArrayList<Observer> observers = new ArrayList<>();
-    private String status;
     int applicationID;
     int postID;
     String jobPostingTitle;
@@ -18,10 +24,9 @@ public class Application implements Subject {
     ArrayList<String> questions;
     ArrayList<String> questionResponses;
     Date dateCompleted;
-    boolean accepted;
-    boolean denied;
+    Status status;
 
-    public Application (int applicationID, int postID, String jobPostingTitle, String resume, ArrayList<String> questions, ArrayList<String> questionResponses, Date dateCompleted, boolean accepted, boolean denied) {
+    public Application (int applicationID, int postID, String jobPostingTitle, String resume, ArrayList<String> questions, ArrayList<String> questionResponses, Date dateCompleted, Status status) {
         this.applicationID = applicationID;
         this.postID = postID;
         this.jobPostingTitle = jobPostingTitle;
@@ -29,9 +34,7 @@ public class Application implements Subject {
         this.questions = new ArrayList<>(questions);
         this.questionResponses = new ArrayList<>(questionResponses);
         this.dateCompleted = dateCompleted;
-        this.accepted = accepted;
-        this.denied = denied;
-        this.status = "";
+        this.status = status;
     }
 
     public Document toDocument() {
@@ -42,8 +45,7 @@ public class Application implements Subject {
                 .append("questions", questions)
                 .append("questionResponses", questionResponses)
                 .append("dateCompleted", dateCompleted)
-                .append("accepted", accepted)
-                .append("denied", denied);
+                .append("status", status);
     }
 
     public void addQuestion(String question) {
@@ -55,23 +57,13 @@ public class Application implements Subject {
         questionResponses.add(response);
     }
 
-
-    public void setAccepted() {
-        accepted = true;
-    }
-
-    public void setDenied() {
-        denied = true;
-    }
-
     public void printApplicationDetails() {
         System.out.println("Application ID: " + applicationID);
         System.out.println("Post ID: " + postID);
         System.out.println("Job Posting Title: " + jobPostingTitle);
         System.out.println("Resume: " + resume);
         System.out.println("Date Completed: " + dateCompleted);
-        System.out.println("Accepted: " + accepted);
-        System.out.println("Denied: " + denied);
+        System.out.println("Status: " + status);
 
         System.out.println("\nQuestions:");
         for (String question : questions) {
@@ -102,14 +94,47 @@ public class Application implements Subject {
     }
 
     // when application is denied, notifies observers
-    public void setDenied(boolean denied) {
-        this.denied = denied;
+    public void setDenied() {
+        this.status = Status.DENIED;
         notifyObservers();
     }
 
     // // when application is accepted, notifies observers
-    public void setAccepted(boolean accepted) {
-        this.accepted = accepted;
+    public void setAccepted() {
+        this.status = Status.ACCEPTED;
         notifyObservers();
+    }
+
+    // GETTERS:
+    public int getApplicationID() {
+        return applicationID;
+    }
+
+    public int getPostID() {
+        return postID;
+    }
+
+    public String getJobPostingTitle() {
+        return jobPostingTitle;
+    }
+
+    public String getResume() {
+        return resume;
+    }
+
+    public ArrayList<String> getQuestions() {
+        return new ArrayList<>(questions);
+    }
+
+    public ArrayList<String> getQuestionResponses() {
+        return new ArrayList<>(questionResponses);
+    }
+
+    public Date getDateCompleted() {
+        return dateCompleted;
+    }
+
+    public Status getStatus() {
+        return status;
     }
 }

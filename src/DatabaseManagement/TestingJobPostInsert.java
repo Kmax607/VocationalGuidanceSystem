@@ -22,8 +22,7 @@ public class TestingJobPostInsert {
                 new ArrayList<>(Arrays.asList("Why do you want this job?")),
                 new ArrayList<>(Arrays.asList("Because I love coding!")),
                 new Date(),
-                false,
-                false
+                Application.Status.UNDER_CONSIDERATION
         );
 
         ArrayList<Application> applications = new ArrayList<>();
