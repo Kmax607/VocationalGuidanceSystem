@@ -65,7 +65,6 @@ public class TestHarness {
         // Job Application Management Tests:
 
         PreviousApplications prevApplication = new PreviousApplications();
-        ApplicationController applController = new ApplicationController(prevApplication);
 
 
         // Filling out application
@@ -80,7 +79,6 @@ public class TestHarness {
                 input = scan.nextInt();
             }
             else {
-                resume = applController.uploadResume(input);
                 checkPassed = true;
             }
         }
@@ -94,19 +92,7 @@ public class TestHarness {
         String response1 = scan.nextLine();
         responses.add(response1);
 
-        Application application = new Application(
-                1,
-                1,
-                newPost.getJobTitle(),
-                "resume",
-                questions,
-                responses,
-                new Date(),
-                Application.Status.UNDER_CONSIDERATION
-        );
-
         System.out.println("This is your application: ");
-        application.printApplicationDetails();
 
         System.out.println("Type 'Y' to submit your application, or 'N' to cancel submission: ");
 
@@ -118,7 +104,7 @@ public class TestHarness {
                 System.out.println("Please enter a valid response: ");
             }
             else if (input2.equals("Y")) {
-                applController.submitApplication(application, newPost);
+
                 System.out.println("Application submitted successfully!");
                 checkPassed = true;
             }

@@ -5,20 +5,19 @@ import JobApplicationManagement.Model.PreviousApplications;
 import JobPostingManagement.Model.JobPost;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import DatabaseManagement.ApplicationRepository;
+import org.bson.types.ObjectId;
 
 public class ApplicationController {
     Application application;
     PreviousApplications previousApplications;
     Scanner scan = new Scanner(System.in);
 
-    public ApplicationController(PreviousApplications previousApplications) {
-        this.previousApplications = previousApplications;
-    }
+    public ApplicationController() {
 
+    }
 
     public void submitApplication(Application application, JobPost post) {
         post.addApplication(application);
@@ -26,11 +25,19 @@ public class ApplicationController {
     }
 
     public void acceptApplication(Application application) {
-        application.setAccepted();
+        ObjectId id = application.getObjectId();
+        ApplicationRepository.acceptApplication(id.toString());
+
     }
 
     public void denyApplication(Application application) {
-        application.setDenied();
+        ObjectId id = application.getObjectId();
+        ApplicationRepository.denyApplication(id.toString());
+    }
+
+    public List<Application> getAllApplications() {
+        List<Application> applications = ApplicationRepository.getAllApplications();
+        return applications;
     }
 
     public File uploadResume(int choice) {

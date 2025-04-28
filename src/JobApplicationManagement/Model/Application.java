@@ -3,6 +3,7 @@ package JobApplicationManagement.Model;
 import JobApplicationManagement.Observer;
 import JobApplicationManagement.Subject;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class Application implements Subject {
         UNDER_CONSIDERATION
     }
     private ArrayList<Observer> observers = new ArrayList<>();
+    ObjectId id;
     int applicationID;
     int postID;
     String jobPostingTitle;
@@ -106,6 +108,7 @@ public class Application implements Subject {
     }
 
     // GETTERS:
+    public ObjectId getObjectId() { return id;}
     public int getApplicationID() {
         return applicationID;
     }
@@ -136,5 +139,10 @@ public class Application implements Subject {
 
     public Status getStatus() {
         return status;
+    }
+
+    //SETTERS
+    public void setId(ObjectId id) {
+        this.id = id;
     }
 }
