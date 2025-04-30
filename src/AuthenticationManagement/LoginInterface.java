@@ -1,8 +1,12 @@
 package AuthenticationManagement;
 
+import JobApplicationManagement.View.ManageApplicationsUI;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.util.Date;
 
 public class LoginInterface extends JFrame {
@@ -43,7 +47,38 @@ public class LoginInterface extends JFrame {
         JTextField userTypeField = new JTextField("Enter user type", 15);
         JButton registerButton = new JButton("Register");
         JButton switchToLogin = new JButton("Already have an account? Login");
-        JButton moreOptionsButton = new JButton("More Options");
+
+        JTextField[] fields = {usernameField, firstNameField, lastNameField, emailField, dobField, userTypeField};
+        String[] placeholders = {"Enter your username", "Enter first name", "Enter last name", "Enter email", "yyyy-mm-dd", "Enter user type"};
+
+        for (int i = 0; i < fields.length; i++) {
+            final int index = i;
+            fields[i].addFocusListener(new FocusAdapter() {
+                public void focusGained(FocusEvent e) {
+                    if (fields[index].getText().equals(placeholders[index])) {
+                        fields[index].setText("");
+                    }
+                }
+                public void focusLost(FocusEvent e) {
+                    if (fields[index].getText().isEmpty()) {
+                        fields[index].setText(placeholders[index]);
+                    }
+                }
+            });
+        }
+
+        passwordField.addFocusListener(new FocusAdapter() {
+            public void focusGained(FocusEvent e) {
+                if (String.valueOf(passwordField.getPassword()).equals("password")) {
+                    passwordField.setText("");
+                }
+            }
+            public void focusLost(FocusEvent e) {
+                if (String.valueOf(passwordField.getPassword()).isEmpty()) {
+                    passwordField.setText("password");
+                }
+            }
+        });
 
         baseFields.add(new JLabel("Username:")); baseFields.add(usernameField);
         baseFields.add(new JLabel("First Name:")); baseFields.add(firstNameField);
@@ -53,15 +88,36 @@ public class LoginInterface extends JFrame {
         optionalFields.add(new JLabel("Date of Birth (yyyy-mm-dd):")); optionalFields.add(dobField);
         optionalFields.add(new JLabel("User Type:")); optionalFields.add(userTypeField);
         optionalFields.add(new JLabel("Password:")); optionalFields.add(passwordField);
-        optionalFields.setVisible(false);
 
-        moreOptionsButton.addActionListener(e -> {
-            optionalFields.setVisible(!optionalFields.isVisible());
-            moreOptionsButton.setText(optionalFields.isVisible() ? "Hide Options" : "More Options");
-            this.revalidate();
-            this.repaint();
-    });
+        registerButton.setEnabled(false);
 
+        for (JTextField field : fields) {
+            field.getDocument().addDocumentListener(new SimpleDocumentListener(() -> {
+                boolean allValid = true;
+                for (int i = 0; i < fields.length; i++) {
+                    if (fields[i].getText().isEmpty() || fields[i].getText().equals(placeholders[i])) {
+                        allValid = false;
+                        break;
+                    }
+                }
+                String pwd = String.valueOf(passwordField.getPassword());
+                if (pwd.isEmpty() || pwd.equals("password")) allValid = false;
+                registerButton.setEnabled(allValid);
+            }));
+        }
+
+        passwordField.getDocument().addDocumentListener(new SimpleDocumentListener(() -> {
+            boolean allValid = true;
+            for (int i = 0; i < fields.length; i++) {
+                if (fields[i].getText().isEmpty() || fields[i].getText().equals(placeholders[i])) {
+                    allValid = false;
+                    break;
+                }
+            }
+            String pwd = String.valueOf(passwordField.getPassword());
+            if (pwd.isEmpty() || pwd.equals("password")) allValid = false;
+            registerButton.setEnabled(allValid);
+        }));
 
         registerButton.addActionListener(e -> {
             try {
@@ -82,12 +138,9 @@ public class LoginInterface extends JFrame {
             }
         });
 
-
         JPanel buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.add(registerButton);
-        buttonPanel.add(moreOptionsButton);
         buttonPanel.add(switchToLogin);
-        panel.add(buttonPanel);
 
         JPanel combinedPanel = new JPanel();
         combinedPanel.setLayout(new BoxLayout(combinedPanel, BoxLayout.Y_AXIS));
@@ -122,6 +175,10 @@ public class LoginInterface extends JFrame {
             if (valid) {
                 JOptionPane.showMessageDialog(this, "Login successful!");
 
+                if (controller.getCurrentUser().getUserType().equalsIgnoreCase("candidate")) {
+                    new ManageApplicationsUI();
+                }
+
             } else {
                 JOptionPane.showMessageDialog(this, "Login failed. Invalid credentials.");
             }
@@ -137,6 +194,13 @@ public class LoginInterface extends JFrame {
     }
 
     public void showLoginError(String error) {
+        JOptionPane.showMessageDialog(this, error);
+    }
 
+    interface SimpleDocumentListener extends javax.swing.event.DocumentListener {
+        void update();
+        @Override default void insertUpdate(javax.swing.event.DocumentEvent e) { update(); }
+        @Override default void removeUpdate(javax.swing.event.DocumentEvent e) { update(); }
+        @Override default void changedUpdate(javax.swing.event.DocumentEvent e) { update(); }
     }
 }
