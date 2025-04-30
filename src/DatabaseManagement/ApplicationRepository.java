@@ -90,4 +90,16 @@ public class ApplicationRepository {
             e.printStackTrace();
         }
     }
+
+    public static List<Application> getApplicationsByUsername(String username) {
+        List<Application> userApps = new ArrayList<>();
+        MongoCollection<Document> collection = Mongo_DB.getDatabase().getCollection("applications");
+        FindIterable<Document> docs = collection.find(Filters.eq("username", username));
+    
+        for (Document doc : docs) {
+            Application app = new Application(doc);
+            userApps.add(app);
+        }
+        return userApps;
+    }
 }
