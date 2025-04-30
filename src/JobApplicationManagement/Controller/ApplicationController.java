@@ -45,4 +45,8 @@ public class ApplicationController {
         return resume;
     }
 
+    public List<Application> getApplicationsByUser(String username) {
+        return ApplicationRepository.getApplicationsByUsername(username); 
+    }
+
 }
