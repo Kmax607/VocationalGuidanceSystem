@@ -176,7 +176,7 @@ public class LoginInterface extends JFrame {
                 JOptionPane.showMessageDialog(this, "Login successful!");
 
                 if (controller.getCurrentUser().getUserType().equalsIgnoreCase("candidate")) {
-                    new ManageApplicationsUI();
+                    new ManageApplicationsUI(username);
                 }
 
             } else {
