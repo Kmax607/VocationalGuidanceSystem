@@ -15,6 +15,18 @@ public class LoginInterface extends JFrame {
     private JPanel mainPanel = new JPanel(cardLayout);
 
     private LoginController controller;
+    private JTextField usernameField;
+    private JTextField firstNameField;
+    private JTextField lastNameField;
+    private JTextField emailField;
+    private JTextField dobField;
+    private JPasswordField passwordField;
+    private JTextField userTypeField;
+    private JButton registerButton;
+
+    private JTextField[] fields;
+    private String[] placeholders;
+
 
     public LoginInterface() {
         setTitle("Authentication");
@@ -38,18 +50,17 @@ public class LoginInterface extends JFrame {
         JPanel baseFields = new JPanel(new GridLayout(3, 2, 10, 10));
         JPanel optionalFields = new JPanel(new GridLayout(4, 2, 10, 10));
 
-        JTextField usernameField = new JTextField("Enter your username", 15);
-        JTextField firstNameField = new JTextField("Enter first name", 15);
-        JTextField lastNameField = new JTextField("Enter last name", 15);
-        JTextField emailField = new JTextField("Enter email", 15);
-        JTextField dobField = new JTextField("yyyy-mm-dd", 15);
-        JPasswordField passwordField = new JPasswordField("password", 15);
-        JTextField userTypeField = new JTextField("Enter user type", 15);
-        JButton registerButton = new JButton("Register");
-        JButton switchToLogin = new JButton("Already have an account? Login");
+        usernameField = new JTextField("Enter your username", 15);
+        firstNameField = new JTextField("Enter first name", 15);
+        lastNameField = new JTextField("Enter last name", 15);
+        emailField = new JTextField("Enter email", 15);
+        dobField = new JTextField("yyyy-mm-dd", 15);
+        passwordField = new JPasswordField("password", 15);
+        userTypeField = new JTextField("Enter user type", 15);
+        registerButton = new JButton("Register");
 
-        JTextField[] fields = {usernameField, firstNameField, lastNameField, emailField, dobField, userTypeField};
-        String[] placeholders = {"Enter your username", "Enter first name", "Enter last name", "Enter email", "yyyy-mm-dd", "Enter user type"};
+        fields = new JTextField[]{usernameField, firstNameField, lastNameField, emailField, dobField, userTypeField};
+        placeholders = new String[]{"Enter your username", "Enter first name", "Enter last name", "Enter email", "yyyy-mm-dd", "Enter user type"};
 
         for (int i = 0; i < fields.length; i++) {
             final int index = i;
@@ -59,6 +70,7 @@ public class LoginInterface extends JFrame {
                         fields[index].setText("");
                     }
                 }
+
                 public void focusLost(FocusEvent e) {
                     if (fields[index].getText().isEmpty()) {
                         fields[index].setText(placeholders[index]);
@@ -73,6 +85,7 @@ public class LoginInterface extends JFrame {
                     passwordField.setText("");
                 }
             }
+
             public void focusLost(FocusEvent e) {
                 if (String.valueOf(passwordField.getPassword()).isEmpty()) {
                     passwordField.setText("password");
@@ -92,32 +105,20 @@ public class LoginInterface extends JFrame {
         registerButton.setEnabled(false);
 
         for (JTextField field : fields) {
-            field.getDocument().addDocumentListener(new SimpleDocumentListener(() -> {
-                boolean allValid = true;
-                for (int i = 0; i < fields.length; i++) {
-                    if (fields[i].getText().isEmpty() || fields[i].getText().equals(placeholders[i])) {
-                        allValid = false;
-                        break;
-                    }
+            field.getDocument().addDocumentListener(new SimpleDocumentListener() {
+                public void update() {
+                    validateForm();
                 }
-                String pwd = String.valueOf(passwordField.getPassword());
-                if (pwd.isEmpty() || pwd.equals("password")) allValid = false;
-                registerButton.setEnabled(allValid);
-            }));
+            });
         }
 
-        passwordField.getDocument().addDocumentListener(new SimpleDocumentListener(() -> {
-            boolean allValid = true;
-            for (int i = 0; i < fields.length; i++) {
-                if (fields[i].getText().isEmpty() || fields[i].getText().equals(placeholders[i])) {
-                    allValid = false;
-                    break;
-                }
+        passwordField.getDocument().addDocumentListener(new SimpleDocumentListener() {
+            public void update() {
+                validateForm();
             }
-            String pwd = String.valueOf(passwordField.getPassword());
-            if (pwd.isEmpty() || pwd.equals("password")) allValid = false;
-            registerButton.setEnabled(allValid);
-        }));
+        });
+
+        JButton switchToLogin = new JButton("Already have an account? Login");
 
         registerButton.addActionListener(e -> {
             try {
@@ -154,6 +155,20 @@ public class LoginInterface extends JFrame {
 
         return panel;
     }
+
+    private void validateForm() {
+        boolean allValid = true;
+        for (int i = 0; i < fields.length; i++) {
+            if (fields[i].getText().isEmpty() || fields[i].getText().equals(placeholders[i])) {
+                allValid = false;
+                break;
+            }
+        }
+        String pwd = String.valueOf(passwordField.getPassword());
+        if (pwd.isEmpty() || pwd.equals("password")) allValid = false;
+        registerButton.setEnabled(allValid);
+    }
+
 
     private JPanel buildLoginPanel() {
         JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
@@ -200,17 +215,17 @@ public class LoginInterface extends JFrame {
     @FunctionalInterface
     interface SimpleDocumentListener extends javax.swing.event.DocumentListener {
         void update();
-    
+
         @Override
         default void insertUpdate(javax.swing.event.DocumentEvent e) {
             update();
         }
-    
+
         @Override
         default void removeUpdate(javax.swing.event.DocumentEvent e) {
             update();
         }
-    
+
         @Override
         default void changedUpdate(javax.swing.event.DocumentEvent e) {
             update();

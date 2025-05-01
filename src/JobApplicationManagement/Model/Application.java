@@ -12,6 +12,9 @@ import java.util.Date;
 
 public class Application implements Subject {
 
+    public Application(Document doc) {
+    }
+
     public enum Status {
         ACCEPTED,
         DENIED,

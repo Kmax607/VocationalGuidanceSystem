@@ -2,6 +2,7 @@ package DatabaseManagement;
 
 import JobApplicationManagement.Model.Application;
 import com.mongodb.client.*;
+import com.mongodb.client.model.Filters;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 

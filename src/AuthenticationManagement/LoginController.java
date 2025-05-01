@@ -47,4 +47,8 @@
             System.out.println("Registration failed. Missing details.");
             return false;
         }
+
+        public User getCurrentUser() {
+            return currentUser;
+        }
     }
