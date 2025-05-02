@@ -1,6 +1,5 @@
 package JobApplicationManagement.View;
 
-import DatabaseManagement.ApplicationRepository;
 import JobApplicationManagement.Controller.ApplicationController;
 import JobApplicationManagement.Model.Application;
 import Main.InterfaceRouter;
@@ -40,13 +39,15 @@ public class ManageApplicationsUI extends JFrame {
         JScrollPane scrollPane = new JScrollPane(applicationTable);
         add(scrollPane, BorderLayout.CENTER);
 
-        JPanel bottomPanel = new JPanel();
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
         backButton = new JButton("Back");
         backButton.addActionListener(e -> handleBack());
         bottomPanel.add(backButton);
 
         add(bottomPanel, BorderLayout.SOUTH);
     }
+
 
     private void loadApplications() {
         List<Application> apps = controller.getAllApplications();
@@ -67,9 +68,7 @@ public class ManageApplicationsUI extends JFrame {
     }
 
     private void handleBack() {
-        controller.routeToJobPostings();
+        this.dispose();
+        controller.getRouter().showJobSearchInterface();
     }
-
-
 }
-

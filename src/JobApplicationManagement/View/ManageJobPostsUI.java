@@ -140,6 +140,7 @@ public class ManageJobPostsUI extends JFrame {
     }
 
     private void handleLogout() {
+        this.dispose();
         controller.routeToLogin();
     }
 

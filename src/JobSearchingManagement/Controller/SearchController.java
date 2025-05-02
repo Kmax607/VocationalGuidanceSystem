@@ -20,6 +20,7 @@ public class SearchController {
     }
 
     public void routeToLogin() {
+        view.dispose();
         router.showLoginInterface();
     }
 
@@ -30,3 +31,4 @@ public class SearchController {
 
     public void routeToApplications() { router.showUserApplicationsInterface(); }
 }
+

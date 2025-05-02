@@ -4,9 +4,6 @@ import AuthenticationManagement.LoginInterface;
 import JobApplicationManagement.View.ManageApplicationsUI;
 import JobApplicationManagement.View.ManageJobPostsUI;
 import JobSearchingManagement.View.JobView;
-import org.bson.types.ObjectId;
-
-import javax.swing.*;
 
 public class InterfaceRouter {
     private LoginInterface loginInterface;
@@ -15,45 +12,29 @@ public class InterfaceRouter {
     private ManageApplicationsUI userApplicationsInterface;
     private String currentUsername;
 
+
     public InterfaceRouter() {
         loginInterface = new LoginInterface(this);
-        loginInterface.setVisible(true);
-
-        manageJobPostsInterface = new ManageJobPostsUI(this);
-        manageJobPostsInterface.setVisible(false);
-
-        jobSearchInterface = new JobView(this);
-        jobSearchInterface.setVisible(false);
-
-        userApplicationsInterface = new ManageApplicationsUI(this);
-        userApplicationsInterface.setVisible(false);
-    }
-
-    public void showLoginInterface() {
-        manageJobPostsInterface.setVisible(false);
-        jobSearchInterface.setVisible(false);
         loginInterface.setVisible(true);
     }
 
     public void showManageJobPostsInterface() {
-        loginInterface.setVisible(false);
+        manageJobPostsInterface = new ManageJobPostsUI(this);
         manageJobPostsInterface.setVisible(true);
-        userApplicationsInterface.dispose();
     }
 
     public void showJobSearchInterface() {
-        loginInterface.setVisible(false);
-        userApplicationsInterface.setVisible(false);
-        jobSearchInterface.setVisible(true);
+        if (jobSearchInterface == null) {
+            jobSearchInterface = new JobView(this);
+        } else {
+            jobSearchInterface.setVisible(true);
+            jobSearchInterface.toFront();
+            jobSearchInterface.requestFocus();
+        }
     }
 
+
     public void showUserApplicationsInterface() {
-        jobSearchInterface.setVisible(false);
-
-        if (userApplicationsInterface != null) {
-            userApplicationsInterface.dispose();
-        }
-
         userApplicationsInterface = new ManageApplicationsUI(this);
         userApplicationsInterface.setVisible(true);
     }
@@ -68,5 +49,14 @@ public class InterfaceRouter {
 
     public static void main(String[] args) {
         new InterfaceRouter();
+    }
+
+    public void showLoginInterface() {
+        if (loginInterface == null) {
+            loginInterface = new LoginInterface(this);
+        }
+        loginInterface.setVisible(true);
+        loginInterface.toFront();
+        loginInterface.requestFocus();
     }
 }

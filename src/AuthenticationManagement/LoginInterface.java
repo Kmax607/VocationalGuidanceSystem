@@ -27,24 +27,23 @@ public class LoginInterface extends JFrame {
 
     private JTextField[] fields;
     private String[] placeholders;
-
+    private InterfaceRouter router;
 
     public LoginInterface(InterfaceRouter router) {
         setTitle("Authentication");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 400);
         setLocationRelativeTo(null);
-
+        this.router = router;
         this.controller = new LoginController(this, router);
 
-        mainPanel.add(buildRegisterPanel(), "register");
         mainPanel.add(buildLoginPanel(), "login");
+        mainPanel.add(buildRegisterPanel(), "register");
 
         add(mainPanel);
-        cardLayout.show(mainPanel, "register");
+        cardLayout.show(mainPanel, "login");
         setVisible(true);
     }
-
     private JPanel buildRegisterPanel() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
 
@@ -58,7 +57,7 @@ public class LoginInterface extends JFrame {
         dobField = new JTextField("yyyy-mm-dd", 15);
         passwordField = new JPasswordField("password", 15);
         userTypeField = new JTextField("Enter user type", 15);
-        registerButton = new JButton("Register");
+        registerButton = new JButton("Need an account? Register");
 
         fields = new JTextField[]{usernameField, firstNameField, lastNameField, emailField, dobField, userTypeField};
         placeholders = new String[]{"Enter your username", "Enter first name", "Enter last name", "Enter email", "yyyy-mm-dd", "Enter user type"};
@@ -136,6 +135,10 @@ public class LoginInterface extends JFrame {
                 User user = new User(username, firstName, lastName, password, email, dob, userType);
                 controller.registerUser(user);
                 JOptionPane.showMessageDialog(this, "User registered successfully!");
+
+                // After registration, go to the login screen
+                cardLayout.show(mainPanel, "login");
+
             } catch (Exception ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(this, "Registration Error: " + ex.getMessage());
@@ -167,7 +170,6 @@ public class LoginInterface extends JFrame {
         registerButton.setEnabled(allValid);
     }
 
-
     private JPanel buildLoginPanel() {
         JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));
 
@@ -185,14 +187,21 @@ public class LoginInterface extends JFrame {
             String password = new String(loginPasswordField.getPassword());
 
             boolean valid = controller.validateLogin(username, password);
+
             if (valid) {
+                router.setCurrentUsername(username);
                 JOptionPane.showMessageDialog(this, "Login successful!");
+
                 String type = controller.getUserType(username, password);
+
                 if (type.equals("recruiter")) {
+                    this.dispose();
                     controller.routeToManageJobPosts(username);
-                }
-                if (type.equals("job seeker")) {
+                } else if (type.equals("job seeker")) {
+                    this.dispose();
                     controller.routeToJobListings(username);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Unknown user type.");
                 }
 
             } else {
@@ -227,5 +236,5 @@ public class LoginInterface extends JFrame {
         default void changedUpdate(javax.swing.event.DocumentEvent e) {
             update();
         }
-}
+    }
 }

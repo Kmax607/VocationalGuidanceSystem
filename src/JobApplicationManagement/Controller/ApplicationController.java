@@ -1,5 +1,6 @@
 package JobApplicationManagement.Controller;
 
+import AuthenticationManagement.LoginInterface;
 import JobApplicationManagement.Model.Application;
 import JobApplicationManagement.Model.PreviousApplications;
 import JobApplicationManagement.View.ManageApplicationsUI;
@@ -56,7 +57,11 @@ public class ApplicationController {
         return ApplicationRepository.getApplicationsByUsername(username);
     }
 
-    public void routeToLogin() { router.showLoginInterface(); }
-    public void routeToJobPostings() { router.showJobSearchInterface(); }
+    public void routeToLogin() {
+        new LoginInterface(router);
+    }
 
+    public InterfaceRouter getRouter() {
+        return router;
+    }
 }
