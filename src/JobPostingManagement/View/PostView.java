@@ -111,7 +111,6 @@ public class PostView extends JFrame {
                     "Navigation error: " + e.getMessage(),
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
-            // Fallback - at least close the window
             this.dispose();
         }
     }

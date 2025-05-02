@@ -105,24 +105,20 @@ public class ManageJobPostsUI extends JFrame {
         JScrollPane applicantsScroll = new JScrollPane(applicantsTable);
         applicantsScroll.setBorder(BorderFactory.createTitledBorder("Applicants"));
 
-        // Accept and Deny buttons
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         acceptButton = new JButton("Accept");
         denyButton = new JButton("Deny");
         buttonPanel.add(acceptButton);
         buttonPanel.add(denyButton);
 
-        // Action listeners for Accept and Deny
         acceptButton.addActionListener(e -> handleAccept());
         denyButton.addActionListener(e -> handleDeny());
 
-        // Split panels: job posts and applicants tables, with buttons at the bottom
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, jobPostsScroll, applicantsScroll);
         splitPane.setDividerLocation(300);
         add(splitPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        // Load applications into the table
         List<Application> applications = controller.getAllApplications();
         for (Application app : applications) {
             applicantsModel.addRow(new Object[]{
@@ -132,7 +128,7 @@ public class ManageJobPostsUI extends JFrame {
                     app.getQuestionResponses().toString(),
                     app.getDateCompleted(),
                     app.getStatus().toString(),
-                    app  // Store the Application object in a hidden column
+                    app
             });
         }
         List<JobPost> recruiterPosts = postController.getJobPostsByRecruiter(recruiterUsername);

@@ -60,7 +60,3 @@ public class PostController {
         router.showManageJobPostsInterface();
     }
 }
-
-
-//Specifically for Recruiters (Job Post Creation)
-//Candidates can click apply which would take them to the Job Application Management
