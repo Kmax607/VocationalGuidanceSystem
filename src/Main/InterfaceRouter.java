@@ -4,6 +4,7 @@ import AuthenticationManagement.LoginInterface;
 import JobApplicationManagement.View.ManageApplicationsUI;
 import JobApplicationManagement.View.ManageJobPostsUI;
 import JobSearchingManagement.View.JobView;
+import JobPostingManagement.View.PostView;
 
 public class InterfaceRouter {
     private LoginInterface loginInterface;
@@ -19,8 +20,13 @@ public class InterfaceRouter {
     }
 
     public void showManageJobPostsInterface() {
-        manageJobPostsInterface = new ManageJobPostsUI(this);
-        manageJobPostsInterface.setVisible(true);
+        if (manageJobPostsInterface == null) {
+            manageJobPostsInterface = new ManageJobPostsUI(this);
+        } else {
+            manageJobPostsInterface.setVisible(true);
+            manageJobPostsInterface.toFront();
+            manageJobPostsInterface.requestFocus();
+        }
     }
 
     public void showJobSearchInterface() {
@@ -32,7 +38,6 @@ public class InterfaceRouter {
             jobSearchInterface.requestFocus();
         }
     }
-
 
     public void showUserApplicationsInterface() {
         userApplicationsInterface = new ManageApplicationsUI(this);

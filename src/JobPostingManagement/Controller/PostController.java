@@ -4,15 +4,24 @@ import DatabaseManagement.JobPostRepository;
 import JobPostingManagement.Model.JobPost;
 import JobPostingManagement.Model.JobPostRepo;
 import JobPostingManagement.View.PostView;
+import Main.InterfaceRouter;
+
 import java.util.List;
 
 public class PostController {
     private PostView jobPostView;
-
+    private InterfaceRouter router;
+    private PostView view;
     public static JobPostRepo jobPostRepo = new JobPostRepo();
 
-    public PostController() {}
-
+    public PostController(InterfaceRouter router) {
+        this.view = view;
+        this.router = this.router;
+        if (router == null) {
+            throw new IllegalArgumentException("Router cannot be null");
+        }
+        this.router = router;
+    }
 
 
     public static boolean createJobPost(JobPost newPost) {
@@ -41,7 +50,6 @@ public class PostController {
     }
 
 
-
     public static boolean createJobPost(String postID, String jobTitle, String postDescription, String recruiter, String date, String company, String location, double salary) {
         JobPost newPost = new JobPost(postID, jobTitle, postDescription, recruiter, date, company, location, salary);
         return jobPostRepo.addJobPost(newPost);
@@ -55,6 +63,13 @@ public class PostController {
         return jobPostRepo.getAllJobs();
     }
 
+
+    public void showManageJobPostsInterface() {
+        if (router == null) {
+            throw new IllegalStateException("Router is null in PostController");
+        }
+        router.showManageJobPostsInterface();
+    }
 }
 
 

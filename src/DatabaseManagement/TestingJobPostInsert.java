@@ -3,8 +3,8 @@ package DatabaseManagement;
 import JobApplicationManagement.Model.Application;
 import JobPostingManagement.Model.JobPost;
 import JobPostingManagement.Controller.PostController;
+import Main.InterfaceRouter;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -12,7 +12,7 @@ import java.util.Date;
 public class TestingJobPostInsert {
 
     public static void main(String[] args) {
-
+        InterfaceRouter router = new InterfaceRouter();
         // Dummy Application
         Application dummyApp = new Application(
                 1,
@@ -43,7 +43,7 @@ public class TestingJobPostInsert {
 
 //        JobPostRepository.insertJobPost(dummyJob);
 
-        PostController postController = new PostController();
+        PostController postController = new PostController(router);
 
         boolean created = PostController.createJobPost(dummyJob);
         if (created) {

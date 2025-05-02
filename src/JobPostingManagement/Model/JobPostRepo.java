@@ -10,10 +10,10 @@ public class JobPostRepo {
     public JobPostRepo repo;
     public PostView jobPostView;
 
-    public JobPostRepo() {
-        this.jobPosts = new ArrayList<>();
-        this.jobPostView = new PostView();
-    }
+//    public JobPostRepo() {
+//        this.jobPosts = new ArrayList<>();
+//        this.jobPostView = new PostView(this);
+//    }
 
     public static JobPost getJobById(String id) {
         for (JobPost job : jobPosts) {
