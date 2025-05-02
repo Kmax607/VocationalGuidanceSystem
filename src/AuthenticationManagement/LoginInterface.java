@@ -100,7 +100,9 @@ public class LoginInterface extends JFrame {
 
         optionalFields.add(new JLabel("Email:")); optionalFields.add(emailField);
         optionalFields.add(new JLabel("Date of Birth (yyyy-mm-dd):")); optionalFields.add(dobField);
-        optionalFields.add(new JLabel("User Type:")); optionalFields.add(userTypeField);
+        optionalFields.add(new JLabel("User Type:"));
+        JComboBox<String> userTypeField = new JComboBox<>(new String[] { "job seeker", "recruiter" });
+        optionalFields.add(userTypeField);
         optionalFields.add(new JLabel("Password:")); optionalFields.add(passwordField);
 
         registerButton.setEnabled(false);
@@ -128,7 +130,7 @@ public class LoginInterface extends JFrame {
                 String lastName = lastNameField.getText();
                 String email = emailField.getText();
                 String password = new String(passwordField.getPassword());
-                String userType = userTypeField.getText();
+                String userType = (String) userTypeField.getSelectedItem();
                 Date dob = java.sql.Date.valueOf(dobField.getText());
 
                 User user = new User(username, firstName, lastName, password, email, dob, userType);
@@ -159,12 +161,7 @@ public class LoginInterface extends JFrame {
 
     private void validateForm() {
         boolean allValid = true;
-        for (int i = 0; i < fields.length; i++) {
-            if (fields[i].getText().isEmpty() || fields[i].getText().equals(placeholders[i])) {
-                allValid = false;
-                break;
-            }
-        }
+
         String pwd = String.valueOf(passwordField.getPassword());
         if (pwd.isEmpty() || pwd.equals("password")) allValid = false;
         registerButton.setEnabled(allValid);
@@ -190,9 +187,12 @@ public class LoginInterface extends JFrame {
             boolean valid = controller.validateLogin(username, password);
             if (valid) {
                 JOptionPane.showMessageDialog(this, "Login successful!");
-
-                if (controller.getCurrentUser().getUserType().equalsIgnoreCase("candidate")) {
-                    new ManageApplicationsUI(username);
+                String type = controller.getUserType(username, password);
+                if (type.equals("recruiter")) {
+                    controller.routeToManageJobPosts();
+                }
+                if (type.equals("job seeker")) {
+                    controller.routeToJobListings();
                 }
 
             } else {

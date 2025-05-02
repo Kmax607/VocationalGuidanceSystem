@@ -20,12 +20,16 @@
             if (UserRepository.validateUser(username, password)) {
                 System.out.println("Login Successful!");
                 System.out.println("Username: " + username + "Password: " + password);
-                routeToJobPosts();
                 return true;
             }
 
             System.out.println("Login failed. Invalid credentials.");
             return false;
+        }
+
+        public String getUserType(String username, String password) {
+            String type = UserRepository.getUserType(username, password);
+            return type;
         }
 
         public void logoutUser() {
@@ -52,11 +56,8 @@
             return false;
         }
 
-        public void routeToJobPosts() {
+        public void routeToManageJobPosts() {
             router.showManageJobPostsInterface();
         }
-
-        public User getCurrentUser() {
-            return currentUser;
-        }
+        public void routeToJobListings() { router.showJobSearchInterface(); }
     }

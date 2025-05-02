@@ -18,10 +18,12 @@ public class InterfaceRouter {
 
         loginInterface.setVisible(true);
         manageJobPostsInterface.setVisible(false);
+        jobSearchInterface.setVisible(false);
     }
 
     public void showLoginInterface() {
         manageJobPostsInterface.setVisible(false);
+        jobSearchInterface.setVisible(false);
         loginInterface.setVisible(true);
     }
 
