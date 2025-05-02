@@ -49,7 +49,7 @@ public class ManageApplicationsUI extends JFrame {
     }
 
     private void loadApplications() {
-        List<Application> apps = controller.getApplicationsByUser();
+        List<Application> apps = controller.getAllApplications();
 
         if (apps != null && !apps.isEmpty()) {
             for (Application app : apps) {
@@ -70,10 +70,6 @@ public class ManageApplicationsUI extends JFrame {
         controller.routeToJobPostings();
     }
 
-    public void refreshApplications() {
-        tableModel.setRowCount(0);
-        loadApplications();
-    }
 
 }
 

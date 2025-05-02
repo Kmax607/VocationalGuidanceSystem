@@ -49,7 +49,12 @@ public class InterfaceRouter {
 
     public void showUserApplicationsInterface() {
         jobSearchInterface.setVisible(false);
-        userApplicationsInterface.refreshApplications();
+
+        if (userApplicationsInterface != null) {
+            userApplicationsInterface.dispose();
+        }
+
+        userApplicationsInterface = new ManageApplicationsUI(this);
         userApplicationsInterface.setVisible(true);
     }
 
