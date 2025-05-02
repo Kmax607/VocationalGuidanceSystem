@@ -23,7 +23,7 @@ public class JobView extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        List<JobPost> jobList = controller.getJobsByRecruiter(recruiterUsername);
+        List<JobPost> jobList = controller.getAllJobs();
 
         JPanel jobPanel = new JPanel();
         jobPanel.setLayout(new BoxLayout(jobPanel, BoxLayout.Y_AXIS));
