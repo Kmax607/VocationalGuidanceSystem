@@ -1,7 +1,9 @@
 package JobApplicationManagement.View;
 
 import DatabaseManagement.ApplicationRepository;
+import JobApplicationManagement.Controller.ApplicationController;
 import JobApplicationManagement.Model.Application;
+import Main.InterfaceRouter;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -11,10 +13,11 @@ import java.util.List;
 public class ManageApplicationsUI extends JFrame {
     private JTable applicationTable;
     private DefaultTableModel tableModel;
-    private String currentUsername;
+    private ApplicationController controller;
+    private JButton backButton;
 
-    public ManageApplicationsUI(String username) {
-        this.currentUsername = username;
+    public ManageApplicationsUI(InterfaceRouter router) {
+        this.controller = new ApplicationController(router);
 
         setTitle("My Applications");
         setSize(800, 400);
@@ -29,6 +32,7 @@ public class ManageApplicationsUI extends JFrame {
 
     private void initUI() {
         tableModel = new DefaultTableModel();
+
         tableModel.setColumnIdentifiers(new String[]{"Post ID", "Job Title", "Resume", "Date Completed", "Status"});
 
         applicationTable = new JTable(tableModel);
@@ -39,7 +43,7 @@ public class ManageApplicationsUI extends JFrame {
     }
 
     private void loadApplications() {
-        List<Application> apps = ApplicationRepository.getApplicationsByUsername(currentUsername);
+        List<Application> apps = controller.getApplicationsByUser();
 
         for (Application app : apps) {
             tableModel.addRow(new Object[]{
@@ -50,10 +54,17 @@ public class ManageApplicationsUI extends JFrame {
                     app.getStatus().toString()
             });
         }
+        JPanel bottomPanel = new JPanel();
+
+        backButton = new JButton("Back");
+        backButton.addActionListener(e -> handleBack());
+        bottomPanel.add(backButton);
+        add(bottomPanel, BorderLayout.SOUTH);
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new ManageApplicationsUI("testUser"));
+    private void handleBack() {
+        controller.routeToJobPostings();
     }
+
 }
 

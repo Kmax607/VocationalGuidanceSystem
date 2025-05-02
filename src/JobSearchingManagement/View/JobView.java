@@ -62,8 +62,14 @@ public class JobView extends JFrame {
             controller.routeToLogin();
         });
 
+        JButton applicationsButton = new JButton("See Applications");
+        applicationsButton.addActionListener(e -> {
+            controller.routeToApplications();
+        });
+
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         bottomPanel.add(logoutButton);
+        bottomPanel.add(applicationsButton);
         add(bottomPanel, BorderLayout.SOUTH);
 
         setVisible(true);

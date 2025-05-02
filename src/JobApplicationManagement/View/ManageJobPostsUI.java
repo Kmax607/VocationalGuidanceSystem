@@ -19,6 +19,7 @@ public class ManageJobPostsUI extends JFrame {
     private JButton acceptButton;
     private JButton denyButton;
     private JButton logoutButton;
+    private JButton applicationsButton;
 
     public ManageJobPostsUI(InterfaceRouter router) {
         setTitle("Recruiter Management System");
@@ -141,5 +142,7 @@ public class ManageJobPostsUI extends JFrame {
     private void handleLogout() {
         controller.routeToLogin();
     }
+
+
 
 }

@@ -56,8 +56,12 @@
             return false;
         }
 
-        public void routeToManageJobPosts() {
+        public void routeToManageJobPosts(String username) {
             router.showManageJobPostsInterface();
+            router.setCurrentUsername(username);
         }
-        public void routeToJobListings() { router.showJobSearchInterface(); }
+        public void routeToJobListings(String username) {
+            router.showJobSearchInterface();
+            router.setCurrentUsername(username);
+        }
     }

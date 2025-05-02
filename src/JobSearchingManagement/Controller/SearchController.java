@@ -27,4 +27,6 @@ public class SearchController {
         List<JobPost> jobs = JobPostRepository.getAllJobPosts();
         return jobs;
     }
+
+    public void routeToApplications() { router.showUserApplicationsInterface(); }
 }

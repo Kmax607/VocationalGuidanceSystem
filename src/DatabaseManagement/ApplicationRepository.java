@@ -94,11 +94,22 @@ public class ApplicationRepository {
 
     public static List<Application> getApplicationsByUsername(String username) {
         List<Application> userApps = new ArrayList<>();
-        MongoCollection<Document> collection = Mongo_DB.getDatabase().getCollection("applications");
-        FindIterable<Document> docs = collection.find(Filters.eq("username", username));
-    
-        for (Document doc : docs) {
-            Application app = new Application(doc);
+
+        MongoDatabase db = mongoClient.getDatabase("applications");
+        MongoCollection<Document> collection = db.getCollection("applications");
+        FindIterable<Document> applications = collection.find(Filters.eq("username", username));
+
+        for (Document doc: applications) {
+            Application app = new Application(
+                    doc.getInteger("applicationID"),
+                    doc.getInteger("postID"),
+                    doc.getString("jobPostingTitle"),
+                    doc.getString("resume"),
+                    (ArrayList<String>) doc.get("questions"),
+                    (ArrayList<String>) doc.get("questionResponses"),
+                    doc.getDate("dateCompleted"),
+                    Application.Status.valueOf(doc.getString("status"))
+            );
             userApps.add(app);
         }
         return userApps;

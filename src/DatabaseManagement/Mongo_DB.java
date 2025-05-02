@@ -42,6 +42,7 @@ public class Mongo_DB {
     }
 
     public static MongoDatabase getDatabase() {
+
         return getDatabase();
     }
 }

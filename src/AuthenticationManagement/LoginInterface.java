@@ -189,10 +189,10 @@ public class LoginInterface extends JFrame {
                 JOptionPane.showMessageDialog(this, "Login successful!");
                 String type = controller.getUserType(username, password);
                 if (type.equals("recruiter")) {
-                    controller.routeToManageJobPosts();
+                    controller.routeToManageJobPosts(username);
                 }
                 if (type.equals("job seeker")) {
-                    controller.routeToJobListings();
+                    controller.routeToJobListings(username);
                 }
 
             } else {

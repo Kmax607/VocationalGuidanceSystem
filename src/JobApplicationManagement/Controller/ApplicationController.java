@@ -2,6 +2,7 @@ package JobApplicationManagement.Controller;
 
 import JobApplicationManagement.Model.Application;
 import JobApplicationManagement.Model.PreviousApplications;
+import JobApplicationManagement.View.ManageApplicationsUI;
 import JobPostingManagement.Model.JobPost;
 
 import java.io.File;
@@ -16,8 +17,10 @@ public class ApplicationController {
     PreviousApplications previousApplications;
     Scanner scan = new Scanner(System.in);
     private InterfaceRouter router;
+    private ManageApplicationsUI view;
 
     public ApplicationController(InterfaceRouter router) {
+        this.view = view;
         this.router = router;
     }
 
@@ -47,10 +50,12 @@ public class ApplicationController {
         return resume;
     }
 
-    public List<Application> getApplicationsByUser(String username) {
-        return ApplicationRepository.getApplicationsByUsername(username); 
+    public List<Application> getApplicationsByUser() {
+        String username = router.getCurrentUsername();
+        return ApplicationRepository.getApplicationsByUsername(username);
     }
 
     public void routeToLogin() { router.showLoginInterface(); }
+    public void routeToJobPostings() { router.showJobSearchInterface(); }
 
 }
