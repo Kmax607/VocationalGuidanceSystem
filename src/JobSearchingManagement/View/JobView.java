@@ -1,47 +1,79 @@
 package JobSearchingManagement.View;
 
-import JobSearchingManagement.Model.JobListing;
+import JobPostingManagement.Model.JobPost;
+import JobSearchingManagement.Controller.SearchController;
+import Main.InterfaceRouter;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
+import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 
-public class JobView {
+public class JobView extends JFrame {
+    private InterfaceRouter router;
+    private SearchController controller;
 
-    // the applied filters for job search
-    private static ArrayList<String> filters = new ArrayList<>();
+    public JobView(InterfaceRouter router) {
+        this.controller = new SearchController(this, router);
 
-    // if toggled in view, filters get applied and sent to controller for query
-    public void applyFilters(boolean toggled) {
-        if (toggled) {
-            filters.add("Job Title");
-            filters.add("Location");
-            filters.add("Company");
-            filters.add("Experience Level");
-            filters.add("Salary Range");
-            filters.add("Job Type");
-            filters.add("Industry");
-            filters.add("Skills Required");
-            filters.add("Date Posted");
-            filters.add("Company Size");
+        setTitle("Available Jobs");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(800, 800);
+        setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
+
+        List<JobPost> jobList = controller.getAllJobs();
+
+        JPanel jobPanel = new JPanel();
+        jobPanel.setLayout(new BoxLayout(jobPanel, BoxLayout.Y_AXIS));
+        jobPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        for (JobPost job : jobList) {
+            JPanel jobCard = new JPanel();
+            jobCard.setLayout(new BoxLayout(jobCard, BoxLayout.Y_AXIS));
+            jobCard.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createTitledBorder(job.getJobTitle()),
+                    BorderFactory.createEmptyBorder(10, 10, 10, 10)
+            ));
+            jobCard.setAlignmentX(Component.LEFT_ALIGNMENT);
+            jobCard.setMaximumSize(new Dimension(Integer.MAX_VALUE, 200));
+
+            jobCard.add(new JLabel("Company: " + job.getCompany()));
+            jobCard.add(new JLabel("Location: " + job.getLocation()));
+            jobCard.add(new JLabel("Salary: $" + job.getSalary()));
+            jobCard.add(new JLabel("Posted on: " + job.getDate()));
+            jobCard.add(new JLabel("Description: " + job.getPostDescription()));
+
+            JButton applyButton = new JButton("Apply");
+            applyButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+            applyButton.addActionListener(e -> handleApply(job));
+            jobCard.add(Box.createRigidArea(new Dimension(0, 5)));
+            jobCard.add(applyButton);
+
+            jobPanel.add(jobCard);
+            jobPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         }
+
+        JScrollPane scrollPane = new JScrollPane(jobPanel);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        add(scrollPane, BorderLayout.CENTER);
+
+        JButton logoutButton = new JButton("Logout");
+        logoutButton.addActionListener(e -> {
+            controller.routeToLogin();
+        });
+
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        bottomPanel.add(logoutButton);
+        add(bottomPanel, BorderLayout.SOUTH);
+
+        setVisible(true);
     }
 
-
-    // Display a list of job listings
-    public void displayJobs(List<JobListing> jobs) {
-        if (jobs.isEmpty()) {
-            System.out.println("No jobs found.");
-        } else {
-            System.out.println("Job Listings:");
-            for (JobListing job : jobs) {
-                System.out.println(job);
-            }
-        }
+    private void handleApply(JobPost job) {
+        JOptionPane.showMessageDialog(this,
+                "You applied to: " + job.getJobTitle() + " at " + job.getCompany(),
+                "Application Submitted",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
-    // Display an error message
-    public void displayError(String message) {
-        System.out.println("Error: " + message);
-    }
 }

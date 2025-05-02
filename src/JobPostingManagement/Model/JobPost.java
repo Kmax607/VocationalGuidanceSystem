@@ -1,9 +1,12 @@
 package JobPostingManagement.Model;
 
 import JobApplicationManagement.Model.Application;
+import org.bson.types.ObjectId;
+
 import java.util.ArrayList;
 
 public class JobPost {
+    ObjectId id;
     String postID;
     String jobTitle;
     String postDescription;
@@ -46,8 +49,8 @@ public class JobPost {
         return postID;
     }
 
-    public void setPostID(String postID) {
-        this.postID = postID;
+    public void setId(ObjectId id) {
+        this.id = id;
     }
 
     public String getPostID() {return postID;}

@@ -1,6 +1,7 @@
 package AuthenticationManagement;
 
 import JobApplicationManagement.View.ManageApplicationsUI;
+import Main.InterfaceRouter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,13 +29,13 @@ public class LoginInterface extends JFrame {
     private String[] placeholders;
 
 
-    public LoginInterface() {
+    public LoginInterface(InterfaceRouter router) {
         setTitle("Authentication");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 400);
         setLocationRelativeTo(null);
 
-        controller = new LoginController(this);
+        this.controller = new LoginController(this, router);
 
         mainPanel.add(buildRegisterPanel(), "register");
         mainPanel.add(buildLoginPanel(), "login");
@@ -202,10 +203,6 @@ public class LoginInterface extends JFrame {
         switchToRegister.addActionListener(e -> cardLayout.show(mainPanel, "register"));
 
         return panel;
-    }
-
-    public static void main(String[] args) {
-        new LoginInterface();
     }
 
     public void showLoginError(String error) {

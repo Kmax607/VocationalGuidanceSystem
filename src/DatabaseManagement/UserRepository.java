@@ -44,4 +44,19 @@ public class UserRepository {
         return false;
     }
 
+    public static String getUserType(String username, String password) {
+        String type = "";
+        try {
+            MongoDatabase db = mongoClient.getDatabase("users");
+            MongoCollection<Document> usersCollection = db.getCollection("users");
+
+            Document query = new Document("username",username).append("password", password);
+            Document user = usersCollection.find(query).first();
+            type = user.getString("userType");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return type;
+    }
 }

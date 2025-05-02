@@ -2,6 +2,7 @@ package JobApplicationManagement.View;
 
 import JobApplicationManagement.Controller.ApplicationController;
 import JobApplicationManagement.Model.Application;
+import Main.InterfaceRouter;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -14,21 +15,30 @@ public class ManageJobPostsUI extends JFrame {
     private JTable applicantsTable;
     private DefaultTableModel jobPostsModel;
     private DefaultTableModel applicantsModel;
-    private ApplicationController controller = new ApplicationController();
+    private ApplicationController controller;
     private JButton acceptButton;
     private JButton denyButton;
+    private JButton logoutButton;
 
-    public ManageJobPostsUI() {
+    public ManageJobPostsUI(InterfaceRouter router) {
         setTitle("Recruiter Management System");
-        setSize(1000, 600);
+        setSize(800, 600);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
+
+        this.controller = new ApplicationController(router);
 
         // Create post button
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton createNewPostButton = new JButton("Create New Job Post");
         topPanel.add(createNewPostButton);
         add(topPanel, BorderLayout.NORTH);
+
+        // Logout button
+        logoutButton = new JButton("Logout");
+        topPanel.add(logoutButton);
+        logoutButton.addActionListener(e -> handleLogout());
 
         // Job post panel
         jobPostsModel = new DefaultTableModel(new String[]{"Title", "Status"}, 0) {
@@ -128,7 +138,8 @@ public class ManageJobPostsUI extends JFrame {
         }
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(ManageJobPostsUI::new);
+    private void handleLogout() {
+        controller.routeToLogin();
     }
+
 }

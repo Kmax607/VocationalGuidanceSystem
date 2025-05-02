@@ -8,15 +8,17 @@ import java.io.File;
 import java.util.List;
 import java.util.Scanner;
 import DatabaseManagement.ApplicationRepository;
+import Main.InterfaceRouter;
 import org.bson.types.ObjectId;
 
 public class ApplicationController {
     Application application;
     PreviousApplications previousApplications;
     Scanner scan = new Scanner(System.in);
+    private InterfaceRouter router;
 
-    public ApplicationController() {
-
+    public ApplicationController(InterfaceRouter router) {
+        this.router = router;
     }
 
     public void submitApplication(Application application, JobPost post) {
@@ -48,5 +50,7 @@ public class ApplicationController {
     public List<Application> getApplicationsByUser(String username) {
         return ApplicationRepository.getApplicationsByUsername(username); 
     }
+
+    public void routeToLogin() { router.showLoginInterface(); }
 
 }

@@ -2,10 +2,13 @@ package DatabaseManagement;
 
 import JobApplicationManagement.Model.Application;
 import JobPostingManagement.Model.JobPost;
+import JobSearchingManagement.Model.JobListing;
 import com.mongodb.client.*;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class JobPostRepository {
 
@@ -55,7 +58,8 @@ public class JobPostRepository {
         }
     }
 
-    public static void getAllJobPosts() {
+    public static List<JobPost> getAllJobPosts() {
+        List<JobPost> jobListings = new ArrayList<>();
         try {
             MongoDatabase db = mongoClient.getDatabase("jobposts");
             MongoCollection<Document> jobPostsCollection = db.getCollection("jobposts");
@@ -63,11 +67,24 @@ public class JobPostRepository {
             FindIterable<Document> jobPosts = jobPostsCollection.find();
 
             for (Document post: jobPosts) {
-                System.out.println("Job Post title: " + post.get("jobTitle"));
+                JobPost job = new JobPost(
+                        post.getString("postID"),
+                        post.getString("jobTitle"),
+                        post.getString("postDescription"),
+                        post.getString("recruiter"),
+                        post.getString("date"),
+                        post.getString("company"),
+                        post.getString("location"),
+                        post.getDouble("salary")
+                );
+                ObjectId generatedId = post.getObjectId("_id");
+                job.setId(generatedId);
+                jobListings.add(job);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return jobListings;
     }
 
 }

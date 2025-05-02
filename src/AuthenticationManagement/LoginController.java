@@ -1,14 +1,17 @@
     package AuthenticationManagement;
 
     import DatabaseManagement.UserRepository;
+    import Main.InterfaceRouter;
 
     public class LoginController {
 
         private LoginInterface view;
         private User currentUser;
+        private InterfaceRouter router;
 
-        public LoginController(LoginInterface view) {
+        public LoginController(LoginInterface view, InterfaceRouter router) {
             this.view = view;
+            this.router = router;
         }
 
         public boolean validateLogin(String username, String password) {
@@ -17,6 +20,7 @@
             if (UserRepository.validateUser(username, password)) {
                 System.out.println("Login Successful!");
                 System.out.println("Username: " + username + "Password: " + password);
+                routeToJobPosts();
                 return true;
             }
 
@@ -46,6 +50,10 @@
 
             System.out.println("Registration failed. Missing details.");
             return false;
+        }
+
+        public void routeToJobPosts() {
+            router.showManageJobPostsInterface();
         }
 
         public User getCurrentUser() {
