@@ -112,6 +112,7 @@ public class ApplicationRepository {
             );
             userApps.add(app);
         }
+        System.out.println(userApps);
         return userApps;
     }
 }

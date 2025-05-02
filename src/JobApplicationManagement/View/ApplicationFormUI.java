@@ -3,6 +3,7 @@ package JobApplicationManagement.View;
 import JobApplicationManagement.Controller.ApplicationController;
 import JobApplicationManagement.Model.Application;
 import JobPostingManagement.Model.JobPost;
+import Main.InterfaceRouter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,7 +25,7 @@ public class ApplicationFormUI extends JFrame {
     public ApplicationFormUI(JobPost jobPost, String username) {
         this.jobPost = jobPost;
         this.username = username;
-        this.applicationController = new ApplicationController();
+        this.applicationController = new ApplicationController(new InterfaceRouter());
 
         setTitle("Submit Application for: " + jobPost.getJobTitle());
         setSize(600, 400);

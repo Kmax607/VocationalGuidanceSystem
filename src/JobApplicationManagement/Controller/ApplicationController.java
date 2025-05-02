@@ -52,6 +52,7 @@ public class ApplicationController {
 
     public List<Application> getApplicationsByUser() {
         String username = router.getCurrentUsername();
+        System.out.println(username);
         return ApplicationRepository.getApplicationsByUsername(username);
     }
 

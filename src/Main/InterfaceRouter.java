@@ -38,6 +38,7 @@ public class InterfaceRouter {
     public void showManageJobPostsInterface() {
         loginInterface.setVisible(false);
         manageJobPostsInterface.setVisible(true);
+        userApplicationsInterface.dispose();
     }
 
     public void showJobSearchInterface() {
@@ -48,6 +49,7 @@ public class InterfaceRouter {
 
     public void showUserApplicationsInterface() {
         jobSearchInterface.setVisible(false);
+        userApplicationsInterface.refreshApplications();
         userApplicationsInterface.setVisible(true);
     }
 

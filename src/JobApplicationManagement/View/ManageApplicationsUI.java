@@ -32,7 +32,6 @@ public class ManageApplicationsUI extends JFrame {
 
     private void initUI() {
         tableModel = new DefaultTableModel();
-
         tableModel.setColumnIdentifiers(new String[]{"Post ID", "Job Title", "Resume", "Date Completed", "Status"});
 
         applicationTable = new JTable(tableModel);
@@ -40,30 +39,40 @@ public class ManageApplicationsUI extends JFrame {
 
         JScrollPane scrollPane = new JScrollPane(applicationTable);
         add(scrollPane, BorderLayout.CENTER);
+
+        JPanel bottomPanel = new JPanel();
+        backButton = new JButton("Back");
+        backButton.addActionListener(e -> handleBack());
+        bottomPanel.add(backButton);
+
+        add(bottomPanel, BorderLayout.SOUTH);
     }
 
     private void loadApplications() {
         List<Application> apps = controller.getApplicationsByUser();
 
-        for (Application app : apps) {
-            tableModel.addRow(new Object[]{
-                    app.getPostID(),
-                    app.getJobPostingTitle(),
-                    app.getResume(),
-                    app.getDateCompleted(),
-                    app.getStatus().toString()
-            });
+        if (apps != null && !apps.isEmpty()) {
+            for (Application app : apps) {
+                tableModel.addRow(new Object[]{
+                        app.getPostID(),
+                        app.getJobPostingTitle(),
+                        app.getResume(),
+                        app.getDateCompleted(),
+                        app.getStatus().toString()
+                });
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "No applications found for this user.", "No Data", JOptionPane.INFORMATION_MESSAGE);
         }
-        JPanel bottomPanel = new JPanel();
-
-        backButton = new JButton("Back");
-        backButton.addActionListener(e -> handleBack());
-        bottomPanel.add(backButton);
-        add(bottomPanel, BorderLayout.SOUTH);
     }
 
     private void handleBack() {
         controller.routeToJobPostings();
+    }
+
+    public void refreshApplications() {
+        tableModel.setRowCount(0);
+        loadApplications();
     }
 
 }
