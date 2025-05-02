@@ -91,6 +91,8 @@ public class PostView extends JFrame {
 
                 if (success) {
                     JOptionPane.showMessageDialog(this, "Job Post Created!");
+                    this.dispose();
+                    controller.showManageJobPostsInterface();
                 } else {
                     JOptionPane.showMessageDialog(this, "Failed to create Job Post.");
                 }

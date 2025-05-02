@@ -3,6 +3,7 @@ package JobApplicationManagement.View;
 import JobApplicationManagement.Controller.ApplicationController;
 import JobApplicationManagement.Model.Application;
 import JobPostingManagement.Controller.PostController;
+import JobPostingManagement.Model.JobPost;
 import JobPostingManagement.View.PostView;
 import Main.InterfaceRouter;
 
@@ -24,9 +25,11 @@ public class ManageJobPostsUI extends JFrame {
     private JButton applicationsButton;
     private InterfaceRouter router;
     private PostController postController;
+    private String recruiterUsername;
 
     public ManageJobPostsUI(InterfaceRouter router) {
         this.router = router;
+        this.recruiterUsername = recruiterUsername;
         this.postController = new PostController(router);
         setTitle("Recruiter Management System");
         setSize(800, 600);
@@ -69,6 +72,11 @@ public class ManageJobPostsUI extends JFrame {
         jobPostsTable = new JTable(jobPostsModel);
         JScrollPane jobPostsScroll = new JScrollPane(jobPostsTable);
         jobPostsScroll.setBorder(BorderFactory.createTitledBorder("Your Job Posts"));
+
+        List<JobPost> jobPosts = postController.getJobPostsByRecruiter(recruiterUsername);
+        for (JobPost jobPost : jobPosts) {
+            jobPostsModel.addRow(new Object[]{jobPost.getJobTitle(), "Open"});
+        }
 
         // Applicant panel
         applicantsModel = new DefaultTableModel(new String[]{"Post Title", "Resume", "Questions", "Question Response", "Date Completed", "Status", "Hidden Row"}, 0) {
@@ -126,6 +134,10 @@ public class ManageJobPostsUI extends JFrame {
                     app.getStatus().toString(),
                     app  // Store the Application object in a hidden column
             });
+        }
+        List<JobPost> recruiterPosts = postController.getJobPostsByRecruiter(recruiterUsername);
+        for (JobPost post : recruiterPosts) {
+            jobPostsModel.addRow(new Object[]{post.getJobTitle(), post.getStatus()});
         }
 
         setVisible(true);

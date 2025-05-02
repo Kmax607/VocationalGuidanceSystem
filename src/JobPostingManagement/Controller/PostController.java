@@ -23,30 +23,22 @@ public class PostController {
         this.router = router;
     }
 
+    public List<JobPost> getJobPostsByRecruiter(String recruiterUsername) {
+        return JobPostRepository.getJobPostsByRecruiter(recruiterUsername);
+    }
 
     public static boolean createJobPost(JobPost newPost) {
-        System.out.println("Creating new Job Post: " + newPost);
-
-        if (!newPost.getPostID().isEmpty() && !newPost.getJobTitle().isEmpty() && !newPost.getRecruiter().isEmpty()) {
-            System.out.println("Successful Post Creation: " + newPost);
+        try {
             JobPostRepository.insertJobPost(newPost);
             return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
-
-        System.out.println("Post Creation Failed. Missing required details: " + newPost.getPostID());
-        return false;
     }
 
     public boolean validateJobPost(String postID) {
-        System.out.println("Validating Post with ID: " + postID);
-
-        if (JobPostRepository.validatePost(postID)) {
-            System.out.println("Post Successfully Identified: " + postID);
-            return true;
-        }
-
-        System.out.println("No Post found with ID: " + postID);
-        return false;
+        return JobPostRepository.validatePost(postID);
     }
 
 
@@ -65,9 +57,6 @@ public class PostController {
 
 
     public void showManageJobPostsInterface() {
-        if (router == null) {
-            throw new IllegalStateException("Router is null in PostController");
-        }
         router.showManageJobPostsInterface();
     }
 }

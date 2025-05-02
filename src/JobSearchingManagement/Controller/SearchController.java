@@ -19,6 +19,11 @@ public class SearchController {
         this.router = router;
     }
 
+    public List<JobPost> getJobsByRecruiter(String recruiter) {
+        return JobPostRepository.getJobPostsByRecruiter(recruiter);
+    }
+
+
     public void routeToLogin() {
         view.dispose();
         router.showLoginInterface();

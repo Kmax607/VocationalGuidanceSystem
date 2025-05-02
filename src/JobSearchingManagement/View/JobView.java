@@ -11,17 +11,19 @@ import java.util.List;
 public class JobView extends JFrame {
     private InterfaceRouter router;
     private SearchController controller;
+    private String recruiterUsername;
 
     public JobView(InterfaceRouter router) {
         this.controller = new SearchController(this, router);
-
+        this.router = router;
+        this.recruiterUsername = recruiterUsername;
         setTitle("Available Jobs");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 800);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        List<JobPost> jobList = controller.getAllJobs();
+        List<JobPost> jobList = controller.getJobsByRecruiter(recruiterUsername);
 
         JPanel jobPanel = new JPanel();
         jobPanel.setLayout(new BoxLayout(jobPanel, BoxLayout.Y_AXIS));

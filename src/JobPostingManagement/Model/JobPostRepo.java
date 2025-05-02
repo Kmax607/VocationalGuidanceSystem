@@ -36,4 +36,5 @@ public class JobPostRepo {
     public List<JobPost> getAllJobs() {
         return jobPosts;
     }
+
 }

@@ -16,6 +16,7 @@ public class JobPost {
     String location;
     double salary;
     ArrayList<Application> applications = new ArrayList<>();
+    private String status;
 
 //    public JobPost JobPostRepo;
 //}
@@ -75,4 +76,15 @@ public class JobPost {
         applications.add(application);
     }
 
+    public Object getRecruiterUsername() {
+        return recruiter;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

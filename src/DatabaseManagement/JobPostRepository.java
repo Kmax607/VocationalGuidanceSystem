@@ -10,6 +10,8 @@ import org.bson.types.ObjectId;
 import java.util.ArrayList;
 import java.util.List;
 
+import static JobPostingManagement.Model.JobPostRepo.jobPosts;
+
 public class JobPostRepository {
 
     private static final String uri = "mongodb+srv://jeffta1080:y7BctXVKdenQAMOu@vocationalguidance.5ybuj6p.mongodb.net/?retryWrites=true&w=majority&appName=VocationalGuidance";
@@ -86,5 +88,35 @@ public class JobPostRepository {
         }
         return jobListings;
     }
+    public static List<JobPost> getJobPostsByRecruiter(String recruiterUsername) {
+        List<JobPost> allPosts = getAllJobPosts();
+        List<JobPost> jobListings = new ArrayList<>();
+        try {
+            MongoDatabase db = mongoClient.getDatabase("jobposts");
+            MongoCollection<Document> jobPostsCollection = db.getCollection("jobposts");
 
+            Document query = new Document("recruiter", recruiterUsername);
+            FindIterable<Document> jobPosts = jobPostsCollection.find(query);
+
+            for (Document post: jobPosts) {
+                JobPost job = new JobPost(
+                        post.getString("postID"),
+                        post.getString("jobTitle"),
+                        post.getString("postDescription"),
+                        post.getString("recruiter"),
+                        post.getString("date"),
+                        post.getString("company"),
+                        post.getString("location"),
+                        post.getDouble("salary")
+                );
+                jobListings.add(job);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return jobListings;
+    }
+    public List<JobPost> getAllJobs() {
+        return jobPosts;
+    }
 }
