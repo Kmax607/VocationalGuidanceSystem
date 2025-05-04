@@ -5,4 +5,4 @@
 | 002            | Adrian           |                                             | Post View, Post Controller, edited InterfaceRouter and LoginInterface                                                                       |
 | 003            | Max              |                                             | ManageApplicationsUI, ApplicationsFormUI                                                                                                    |
 | 004            | Aryan            |                                             | ManageJobPostUI, Promote UI                                                                                                                 |
-| 005            | Ty               |                                             | JobSeekerUI                                                                                                                                            
+| 005            | Ty               |                                             | JobSeekerUI, Nonfunctional requirements                                                                                                                                            
