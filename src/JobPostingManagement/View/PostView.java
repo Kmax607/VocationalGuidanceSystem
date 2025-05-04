@@ -16,7 +16,7 @@ public class PostView extends JFrame {
     private final PostController controller;
     private InterfaceRouter router;
 
-    public PostView(PostController controller) {
+    public PostView(PostController controller, InterfaceRouter router) {
         this.router = router;
         this.controller = controller;
         if (controller == null) {
@@ -35,7 +35,8 @@ public class PostView extends JFrame {
         postIDField = new JTextField("Enter Post ID");
         titleField = new JTextField("Enter Job Title");
         descriptionField = new JTextField("Enter Description");
-        recruiterField = new JTextField("Enter Recruiter");
+        recruiterField = new JTextField(router.getCurrentUsername());
+        recruiterField.setEditable(false);
         dateField = new JTextField("YYYY-MM-DD");
         companyField = new JTextField("Enter Company Name");
         locationField = new JTextField("Enter Location");

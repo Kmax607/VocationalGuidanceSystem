@@ -9,6 +9,7 @@ import org.bson.types.ObjectId;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class ApplicationRepository {
     private static final String uri = "mongodb+srv://jeffta1080:y7BctXVKdenQAMOu@vocationalguidance.5ybuj6p.mongodb.net/?retryWrites=true&w=majority&appName=VocationalGuidance";
@@ -114,5 +115,35 @@ public class ApplicationRepository {
         }
         System.out.println(userApps);
         return userApps;
+    }
+
+    public static List<Application> getApplicationsByJobTitle(String jobTitle) {
+        List<Application> matchingApps = new ArrayList<>();
+        System.out.println("job title:" + jobTitle);
+
+        MongoDatabase db = mongoClient.getDatabase("applications");
+        MongoCollection<Document> collection = db.getCollection("applications");
+
+        FindIterable<Document> applications = collection.find(
+                Filters.regex("jobPostingTitle", Pattern.compile("^" + Pattern.quote(jobTitle) + "$", Pattern.CASE_INSENSITIVE))
+        );
+
+        //this loop isnt executing
+        for (Document doc: applications) {
+            Application app = new Application(
+                    doc.getInteger("applicationID"),
+                    doc.getInteger("postID"),
+                    doc.getString("jobPostingTitle"),
+                    doc.getString("resume"),
+                    (ArrayList<String>) doc.get("questions"),
+                    (ArrayList<String>) doc.get("questionResponses"),
+                    doc.getDate("dateCompleted"),
+                    Application.Status.valueOf(doc.getString("status"))
+            );
+            System.out.println("did this run");
+            matchingApps.add(app);
+        }
+        System.out.println(matchingApps);
+        return matchingApps;
     }
 }

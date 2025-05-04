@@ -87,4 +87,7 @@ public class JobPost {
     public void setStatus(String status) {
         this.status = status;
     }
+    public ObjectId getId() {
+        return id;
+    }
 }

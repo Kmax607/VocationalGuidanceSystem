@@ -1,5 +1,6 @@
 package JobSearchingManagement.View;
 
+import JobPostingManagement.Controller.PostController;
 import JobPostingManagement.Model.JobPost;
 import JobSearchingManagement.Controller.SearchController;
 import Main.InterfaceRouter;
@@ -12,11 +13,13 @@ public class JobView extends JFrame {
     private InterfaceRouter router;
     private SearchController controller;
     private String recruiterUsername;
+    private PostController jobPostController;
 
     public JobView(InterfaceRouter router) {
         this.controller = new SearchController(this, router);
         this.router = router;
         this.recruiterUsername = recruiterUsername;
+        this.jobPostController = new PostController(router);
         setTitle("Available Jobs");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 800);
@@ -78,6 +81,7 @@ public class JobView extends JFrame {
     }
 
     private void handleApply(JobPost job) {
+        jobPostController.addApplicantToJobPost(job);
         JOptionPane.showMessageDialog(this,
                 "You applied to: " + job.getJobTitle() + " at " + job.getCompany(),
                 "Application Submitted",

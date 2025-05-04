@@ -29,7 +29,7 @@ public class ManageJobPostsUI extends JFrame {
 
     public ManageJobPostsUI(InterfaceRouter router) {
         this.router = router;
-        this.recruiterUsername = recruiterUsername;
+        this.recruiterUsername = router.getCurrentUsername();
         this.postController = new PostController(router);
         setTitle("Recruiter Management System");
         setSize(800, 600);
@@ -58,7 +58,7 @@ public class ManageJobPostsUI extends JFrame {
         logoutButton.addActionListener(e -> handleLogout());
         createNewPostButton.addActionListener(e -> {
             this.dispose();  // Close current window
-            PostView postView = new PostView(postController);  // Pass the controller
+            PostView postView = new PostView(postController, router);  // Pass the controller
             postView.setVisible(true);
         });
 
@@ -73,11 +73,22 @@ public class ManageJobPostsUI extends JFrame {
         JScrollPane jobPostsScroll = new JScrollPane(jobPostsTable);
         jobPostsScroll.setBorder(BorderFactory.createTitledBorder("Your Job Posts"));
 
-        List<JobPost> jobPosts = postController.getAllJobPosts();
+        List<JobPost> jobPosts = postController.getJobPostsByRecruiter(recruiterUsername);
         System.out.println("from jobpost ui: " + jobPosts);
         for (JobPost jobPost : jobPosts) {
             jobPostsModel.addRow(new Object[]{jobPost.getJobTitle(), "Open"});
         }
+
+        // event listener for table selection
+        jobPostsTable.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int selectedRow = jobPostsTable.getSelectedRow();
+                if (selectedRow != -1) {
+                    String selectedTitle = jobPostsModel.getValueAt(selectedRow, 0).toString();
+                    refreshApplicationTable(selectedTitle);
+                }
+            }
+        });
 
         // Applicant panel
         applicantsModel = new DefaultTableModel(new String[]{"Post Title", "Resume", "Questions", "Question Response", "Date Completed", "Status", "Hidden Row"}, 0) {
@@ -120,7 +131,11 @@ public class ManageJobPostsUI extends JFrame {
         add(splitPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        List<Application> applications = controller.getAllApplications();
+        setVisible(true);
+    }
+
+    public void refreshApplicationTable(String jobTitle) {
+        List<Application> applications = controller.getApplicationsByJobTitle(jobTitle);
         for (Application app : applications) {
             applicantsModel.addRow(new Object[]{
                     app.getJobPostingTitle(),
@@ -132,14 +147,7 @@ public class ManageJobPostsUI extends JFrame {
                     app
             });
         }
-        List<JobPost> recruiterPosts = postController.getJobPostsByRecruiter(recruiterUsername);
-        for (JobPost post : recruiterPosts) {
-            jobPostsModel.addRow(new Object[]{post.getJobTitle(), post.getStatus()});
-        }
-
-        setVisible(true);
     }
-
     private void handleAccept() {
         int selectedRow = applicantsTable.getSelectedRow();
         if (selectedRow != -1) {
@@ -171,6 +179,12 @@ public class ManageJobPostsUI extends JFrame {
         controller.routeToLogin();
     }
 
-
+    public void reloadJobPostsTable() {
+        jobPostsModel.setRowCount(0);
+        List<JobPost> recruiterPosts = postController.getJobPostsByRecruiter(recruiterUsername);
+        for (JobPost post : recruiterPosts) {
+            jobPostsModel.addRow(new Object[]{post.getJobTitle(), "Open"});
+        }
+    }
 
 }

@@ -8,6 +8,8 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static JobPostingManagement.Model.JobPostRepo.jobPosts;
@@ -86,11 +88,10 @@ public class JobPostRepository {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("from job post repo: " + jobListings);
         return jobListings;
     }
     public static List<JobPost> getJobPostsByRecruiter(String recruiterUsername) {
-        List<JobPost> allPosts = getAllJobPosts();
+        // List<JobPost> allPosts = getAllJobPosts();
         List<JobPost> jobListings = new ArrayList<>();
         try {
             MongoDatabase db = mongoClient.getDatabase("jobposts");
@@ -115,9 +116,37 @@ public class JobPostRepository {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("from job post repo: " + jobListings);
         return jobListings;
     }
-    public List<JobPost> getAllJobs() {
-        return jobPosts;
+
+    // refactor so it includes an Application object to add to the list, right now just dummy data
+    public static void addApplicationToPost(JobPost job) {
+        try {
+            MongoDatabase db = mongoClient.getDatabase("jobposts");
+            MongoCollection<Document> jobPostsCollection = db.getCollection("jobposts");
+
+            //where to add logic for getting Application
+            Application dummyApp = new Application(
+                    1,
+                    1001,
+                    "testing jobs",
+                    "resume.pdf",
+                    new ArrayList<>(Arrays.asList("Why do you want this job?")),
+                    new ArrayList<>(Arrays.asList("Because I love coding!")),
+                    new Date(),
+                    Application.Status.UNDER_CONSIDERATION
+            );
+
+            Document query = new Document("_id", job.getId());
+            Document update = new Document("$push", new Document("applications", dummyApp.toDocument()));
+
+            jobPostsCollection.updateOne(query, update);
+
+            System.out.println("added applicant to the list of applicants of: " + job);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -24,7 +24,9 @@ public class PostController {
     }
 
     public List<JobPost> getJobPostsByRecruiter(String recruiterUsername) {
-        return JobPostRepository.getJobPostsByRecruiter(recruiterUsername);
+        List<JobPost> jobposts = JobPostRepository.getJobPostsByRecruiter(recruiterUsername);
+        System.out.println("from controller: " + jobposts);
+        return jobposts;
     }
 
     public static boolean createJobPost(JobPost newPost) {
@@ -55,6 +57,11 @@ public class PostController {
         List<JobPost> jobposts = JobPostRepository.getAllJobPosts();
         System.out.println("from controller: " + jobposts);
         return jobposts;
+    }
+
+    // add Application obj as param
+    public static void addApplicantToJobPost(JobPost job) {
+        JobPostRepository.addApplicationToPost(job);
     }
 
 

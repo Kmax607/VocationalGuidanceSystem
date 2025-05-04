@@ -23,6 +23,7 @@ public class InterfaceRouter {
         if (manageJobPostsInterface == null) {
             manageJobPostsInterface = new ManageJobPostsUI(this);
         } else {
+            manageJobPostsInterface.reloadJobPostsTable();
             manageJobPostsInterface.setVisible(true);
             manageJobPostsInterface.toFront();
             manageJobPostsInterface.requestFocus();

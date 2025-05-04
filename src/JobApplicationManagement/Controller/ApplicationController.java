@@ -46,9 +46,9 @@ public class ApplicationController {
         return applications;
     }
 
-    public File uploadResume(int choice) {
-        File resume = new File("src/resume.txt");
-        return resume;
+    public List<Application> getApplicationsByJobTitle(String jobTitle) {
+        List<Application> applications = ApplicationRepository.getApplicationsByJobTitle(jobTitle);
+        return applications;
     }
 
     public List<Application> getApplicationsByUser() {
