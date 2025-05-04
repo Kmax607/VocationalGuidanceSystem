@@ -86,6 +86,7 @@ public class JobPostRepository {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println(jobListings);
         return jobListings;
     }
     public static List<JobPost> getJobPostsByRecruiter(String recruiterUsername) {
