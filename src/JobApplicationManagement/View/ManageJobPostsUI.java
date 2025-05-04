@@ -135,6 +135,7 @@ public class ManageJobPostsUI extends JFrame {
     }
 
     public void refreshApplicationTable(String jobTitle) {
+        applicantsModel.setRowCount(0);
         List<Application> applications = controller.getApplicationsByJobTitle(jobTitle);
         for (Application app : applications) {
             applicantsModel.addRow(new Object[]{

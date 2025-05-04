@@ -14,7 +14,7 @@ public class TestingApplicationInsert {
         Application dummyApp = new Application(
                 1,
                 1001,
-                "Junior Developer",
+                "testing jobs",
                 "resume.pdf",
                 new ArrayList<>(Arrays.asList("Why do you want this job?")),
                 new ArrayList<>(Arrays.asList("Because I love coding!")),
@@ -34,7 +34,7 @@ public class TestingApplicationInsert {
         );
 
         ApplicationRepository.insertApplication(dummyApp);
-        ApplicationRepository.insertApplication(dummyApp2);
+        //ApplicationRepository.insertApplication(dummyApp2);
     }
 
 }
