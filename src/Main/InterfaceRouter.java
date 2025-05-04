@@ -4,7 +4,8 @@ import AuthenticationManagement.LoginInterface;
 import JobApplicationManagement.View.ManageApplicationsUI;
 import JobApplicationManagement.View.ManageJobPostsUI;
 import JobSearchingManagement.View.JobView;
-import JobPostingManagement.View.PostView;
+import JobApplicationManagement.View.ApplicationFormUI;
+import JobPostingManagement.Model.JobPost;
 
 public class InterfaceRouter {
     private LoginInterface loginInterface;
@@ -43,6 +44,10 @@ public class InterfaceRouter {
     public void showUserApplicationsInterface() {
         userApplicationsInterface = new ManageApplicationsUI(this);
         userApplicationsInterface.setVisible(true);
+    }
+
+    public void showApplicationForm(JobPost job, String username) {
+        new ApplicationFormUI(job, username);
     }
 
     public void setCurrentUsername(String username) {

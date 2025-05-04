@@ -17,6 +17,7 @@ public class ApplicationFormUI extends JFrame {
     private JTextArea questionsArea;
     private JTextArea responsesArea;
     private JButton submitButton;
+    private InterfaceRouter router;
 
     private ApplicationController applicationController;
     private JobPost jobPost;
@@ -25,7 +26,8 @@ public class ApplicationFormUI extends JFrame {
     public ApplicationFormUI(JobPost jobPost, String username) {
         this.jobPost = jobPost;
         this.username = username;
-        this.applicationController = new ApplicationController(new InterfaceRouter());
+        this.router = router;
+        this.applicationController = new ApplicationController(router);
 
         setTitle("Submit Application for: " + jobPost.getJobTitle());
         setSize(600, 400);
@@ -58,6 +60,12 @@ public class ApplicationFormUI extends JFrame {
         panel.add(submitButton);
 
         add(panel);
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(e -> {
+            this.dispose();
+            router.showJobSearchInterface();
+        });
+        panel.add(backButton);
     }
 
     private void handleSubmit(ActionEvent e) {

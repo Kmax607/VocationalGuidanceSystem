@@ -81,11 +81,7 @@ public class JobView extends JFrame {
     }
 
     private void handleApply(JobPost job) {
-        jobPostController.addApplicantToJobPost(job);
-        JOptionPane.showMessageDialog(this,
-                "You applied to: " + job.getJobTitle() + " at " + job.getCompany(),
-                "Application Submitted",
-                JOptionPane.INFORMATION_MESSAGE);
+        router.showApplicationForm(job, router.getCurrentUsername());
     }
 
 }
