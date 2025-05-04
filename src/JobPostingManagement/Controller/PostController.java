@@ -52,7 +52,9 @@ public class PostController {
     }
 
     public static List<JobPost> getAllJobPosts() {
-        return jobPostRepo.getAllJobs();
+        List<JobPost> jobposts = JobPostRepository.getAllJobPosts();
+        System.out.println("from controller: " + jobposts);
+        return jobposts;
     }
 
 

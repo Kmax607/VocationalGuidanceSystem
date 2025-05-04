@@ -73,7 +73,8 @@ public class ManageJobPostsUI extends JFrame {
         JScrollPane jobPostsScroll = new JScrollPane(jobPostsTable);
         jobPostsScroll.setBorder(BorderFactory.createTitledBorder("Your Job Posts"));
 
-        List<JobPost> jobPosts = postController.getJobPostsByRecruiter(recruiterUsername);
+        List<JobPost> jobPosts = postController.getAllJobPosts();
+        System.out.println("from jobpost ui: " + jobPosts);
         for (JobPost jobPost : jobPosts) {
             jobPostsModel.addRow(new Object[]{jobPost.getJobTitle(), "Open"});
         }

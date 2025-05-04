@@ -86,7 +86,7 @@ public class JobPostRepository {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(jobListings);
+        System.out.println("from job post repo: " + jobListings);
         return jobListings;
     }
     public static List<JobPost> getJobPostsByRecruiter(String recruiterUsername) {
