@@ -1,8 +1,8 @@
 
-| Team-Member ID | Team-Member Name | Percentage Efforts in Particular Assignment | Brief of Efforts in the Tasks Contribution |
-|----------------|------------------|---------------------------------------------|--------------------------------------------|
-| 001            | Jeff             |                                             |                                            |
-| 002            | Adrian           |                                             | Integrated ApplicationFormUI with JobView  |
-| 003            | Max              |                                             |                                            |
-| 004            | Aryan            |                                             |                                            |
-| 005            | Ty               |                                             | JobSeekerUI, Nonfunctional requirements    
+| Team-Member ID | Team-Member Name | Percentage Efforts in Particular Assignment | Brief of Efforts in the Tasks Contribution                                                                                                                                                               |
+|----------------|------------------|---------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 001            | Jeff             |                                             |                                                                                                                                                                                                          |
+| 002            | Adrian           |                                             | Integrated ApplicationFormUI with JobView, ApplicationController/ApplicationRepository/ApplicationFormUI fixes: You are able to submit a specific application as a Job Seeker and view it as a Recruiter |
+| 003            | Max              |                                             |                                                                                                                                                                                                          |
+| 004            | Aryan            |                                             |                                                                                                                                                                                                          |
+| 005            | Ty               |                                             | JobSeekerUI, Nonfunctional requirements                                                                                                                                                                  

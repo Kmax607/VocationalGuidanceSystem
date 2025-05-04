@@ -6,7 +6,6 @@ import com.mongodb.client.model.Filters;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -21,13 +20,16 @@ public class ApplicationRepository {
             MongoCollection<Document> applicationsCollection = db.getCollection("applications");
 
             Document applicationDoc = application.toDocument();
-
             applicationsCollection.insertOne(applicationDoc);
             System.out.println("Application inserted successfully!");
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void submitApplication(Application application) {
+        insertApplication(application);  // Insert the application into the database
     }
 
     public static List<Application> getAllApplications() {
@@ -39,16 +41,16 @@ public class ApplicationRepository {
 
             FindIterable<Document> applications = applicationsCollection.find();
 
-            for (Document doc: applications) {
+            for (Document doc : applications) {
                 Application app = new Application(
-                    doc.getInteger("applicationID"),
-                    doc.getInteger("postID"),
-                    doc.getString("jobPostingTitle"),
-                    doc.getString("resume"),
-                    (ArrayList<String>) doc.get("questions"),
-                    (ArrayList<String>) doc.get("questionResponses"),
-                    doc.getDate("dateCompleted"),
-                    Application.Status.valueOf(doc.getString("status"))
+                        doc.getInteger("applicationID"),
+                        doc.getInteger("postID"),
+                        doc.getString("jobPostingTitle"),
+                        doc.getString("resume"),
+                        (ArrayList<String>) doc.get("questions"),
+                        (ArrayList<String>) doc.get("questionResponses"),
+                        doc.getDate("dateCompleted"),
+                        Application.Status.valueOf(doc.getString("status"))
                 );
                 ObjectId generatedId = doc.getObjectId("_id");
                 app.setId(generatedId);
@@ -100,7 +102,7 @@ public class ApplicationRepository {
         MongoCollection<Document> collection = db.getCollection("applications");
         FindIterable<Document> applications = collection.find(Filters.eq("username", username));
 
-        for (Document doc: applications) {
+        for (Document doc : applications) {
             Application app = new Application(
                     doc.getInteger("applicationID"),
                     doc.getInteger("postID"),
@@ -128,8 +130,7 @@ public class ApplicationRepository {
                 Filters.regex("jobPostingTitle", Pattern.compile("^" + Pattern.quote(jobTitle) + "$", Pattern.CASE_INSENSITIVE))
         );
 
-        //this loop isnt executing
-        for (Document doc: applications) {
+        for (Document doc : applications) {
             Application app = new Application(
                     doc.getInteger("applicationID"),
                     doc.getInteger("postID"),

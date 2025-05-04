@@ -3,17 +3,22 @@ package JobApplicationManagement.Model;
 import java.util.ArrayList;
 
 public class PreviousApplications {
-    ArrayList<Application> applicationsSent = new ArrayList<>();
+    private ArrayList<Application> previousApplications;
 
+    // Constructor initializes the list
     public PreviousApplications() {
+        this.previousApplications = new ArrayList<>();
     }
 
     public void addApplication(Application application) {
-        applicationsSent.add(application);
+        if (previousApplications == null) {
+            previousApplications = new ArrayList<>();
+        }
+        previousApplications.add(application);
     }
 
-    public void deleteApplication(Application application) {
-        applicationsSent.remove(application);
+    public ArrayList<Application> getApplications() {
+        return previousApplications;
     }
-
 }
+
