@@ -23,7 +23,7 @@ public class ApplicationFormUI extends JFrame {
     private JobPost jobPost;
     private String username;
 
-    public ApplicationFormUI(JobPost jobPost, String username) {
+    public ApplicationFormUI(JobPost jobPost, String username, InterfaceRouter router) {
         this.jobPost = jobPost;
         this.username = username;
         this.router = router;
@@ -62,8 +62,12 @@ public class ApplicationFormUI extends JFrame {
         add(panel);
         JButton backButton = new JButton("Back");
         backButton.addActionListener(e -> {
-            this.dispose();
-            router.showJobSearchInterface();
+            if (router != null) {
+                this.dispose();
+                router.showJobSearchInterface();
+            } else {
+                JOptionPane.showMessageDialog(this, "Router not initialized.");
+            }
         });
         panel.add(backButton);
     }
@@ -108,8 +112,4 @@ public class ApplicationFormUI extends JFrame {
         }
     }
 
-    public static void main(String[] args) {
-        JobPost dummyJob = new JobPost("1", "Software Engineer", "Entry-level development role", "recruiter1", "2025-04-01", "Tech Corp", "Remote", 70000);
-        SwingUtilities.invokeLater(() -> new ApplicationFormUI(dummyJob, "testUser"));
-    }
 }

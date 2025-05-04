@@ -14,8 +14,10 @@ public class ManageApplicationsUI extends JFrame {
     private DefaultTableModel tableModel;
     private ApplicationController controller;
     private JButton backButton;
+    private InterfaceRouter router;
 
     public ManageApplicationsUI(InterfaceRouter router) {
+        this.router = router;
         this.controller = new ApplicationController(router);
 
         setTitle("My Applications");

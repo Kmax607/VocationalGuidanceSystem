@@ -47,7 +47,7 @@ public class InterfaceRouter {
     }
 
     public void showApplicationForm(JobPost job, String username) {
-        new ApplicationFormUI(job, username);
+        new ApplicationFormUI(job, username, this);
     }
 
     public void setCurrentUsername(String username) {

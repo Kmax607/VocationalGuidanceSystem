@@ -12,13 +12,11 @@ import java.util.List;
 public class JobView extends JFrame {
     private InterfaceRouter router;
     private SearchController controller;
-    private String recruiterUsername;
     private PostController jobPostController;
 
     public JobView(InterfaceRouter router) {
         this.controller = new SearchController(this, router);
         this.router = router;
-        this.recruiterUsername = recruiterUsername;
         this.jobPostController = new PostController(router);
         setTitle("Available Jobs");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

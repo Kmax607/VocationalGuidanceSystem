@@ -6,7 +6,7 @@ import JobApplicationManagement.Model.PreviousApplications;
 import JobApplicationManagement.View.ManageApplicationsUI;
 import JobPostingManagement.Model.JobPost;
 
-import java.io.File;
+
 import java.util.List;
 import java.util.Scanner;
 import DatabaseManagement.ApplicationRepository;
@@ -20,14 +20,17 @@ public class ApplicationController {
     private InterfaceRouter router;
     private ManageApplicationsUI view;
 
+
     public ApplicationController(InterfaceRouter router) {
         this.view = view;
         this.router = router;
+        this.previousApplications = previousApplications;
     }
 
     public void submitApplication(Application application, JobPost post) {
         post.addApplication(application);
         previousApplications.addApplication(application);
+        ApplicationRepository.insertApplication(application);
     }
 
     public void acceptApplication(Application application) {
