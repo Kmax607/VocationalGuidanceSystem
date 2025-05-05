@@ -1,23 +1,18 @@
 package JobPostingManagement.Model;
 
-import JobPostingManagement.View.PostView;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class JobPostRepo {
-    public static List<JobPost> jobPosts = new ArrayList<>();
-    public JobPostRepo repo;
-    public PostView jobPostView;
+    private List<JobPost> jobPosts = new ArrayList<>();
 
-//    public JobPostRepo() {
-//        this.jobPosts = new ArrayList<>();
-//        this.jobPostView = new PostView(this);
-//    }
+    public JobPostRepo() {
+        // Initialize with sample data if needed
+    }
 
-    public static JobPost getJobById(String id) {
+    public JobPost getJobById(int id) {
         for (JobPost job : jobPosts) {
-            if (job.postID().equals(id)) {
+            if (job.getPostID().equals(id)) {
                 return job;
             }
         }
@@ -25,16 +20,19 @@ public class JobPostRepo {
     }
 
     public boolean addJobPost(JobPost jobPost) {
-        jobPosts.add(jobPost);
+        if (jobPost != null && !jobPosts.contains(jobPost)) {
+            return jobPosts.add(jobPost);
+        }
         return false;
     }
 
     public void deleteJobPost(JobPost jobPost) {
-        jobPosts.remove(jobPost);
+        if (jobPost != null) {
+            jobPosts.remove(jobPost);
+        }
     }
 
     public List<JobPost> getAllJobs() {
-        return jobPosts;
+        return new ArrayList<>(jobPosts); // Return a copy to prevent external modification
     }
-
 }

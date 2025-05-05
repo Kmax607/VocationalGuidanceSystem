@@ -9,7 +9,6 @@ import Main.InterfaceRouter;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.util.List;
 
@@ -22,7 +21,6 @@ public class ManageJobPostsUI extends JFrame {
     private JButton acceptButton;
     private JButton denyButton;
     private JButton logoutButton;
-    private JButton applicationsButton;
     private InterfaceRouter router;
     private PostController postController;
     private String recruiterUsername;
@@ -31,38 +29,31 @@ public class ManageJobPostsUI extends JFrame {
         this.router = router;
         this.recruiterUsername = router.getCurrentUsername();
         this.postController = new PostController(router);
+        this.controller = new ApplicationController(router);
+
         setTitle("Recruiter Management System");
         setSize(800, 600);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        this.controller = new ApplicationController(router);
-
-        // Create post button
+        // Top panel with buttons
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton createNewPostButton = new JButton("Create New Job Post");
-        topPanel.add(createNewPostButton);
-        add(topPanel, BorderLayout.NORTH);
-        // ActionListener for creating a new job post
-//        createNewPostButton.addActionListener(e -> {
-//            // Show the PostView for creating a new job post
-//            PostController postController = new PostController();  // Pass router to the constructor
-//            PostView postView = new PostView(this);
-//            postView.setVisible(true);  // Make it visible
-//        });
-
-        // Logout button
         logoutButton = new JButton("Logout");
+        topPanel.add(createNewPostButton);
         topPanel.add(logoutButton);
-        logoutButton.addActionListener(e -> handleLogout());
+        add(topPanel, BorderLayout.NORTH);
+
+        // Action listeners
         createNewPostButton.addActionListener(e -> {
-            this.dispose();  // Close current window
-            PostView postView = new PostView(postController, router);  // Pass the controller
+            this.dispose();
+            PostView postView = new PostView(postController, router);
             postView.setVisible(true);
         });
+        logoutButton.addActionListener(e -> handleLogout());
 
-        // Job post panel
+        // Job posts table
         jobPostsModel = new DefaultTableModel(new String[]{"Title", "Status"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -74,12 +65,11 @@ public class ManageJobPostsUI extends JFrame {
         jobPostsScroll.setBorder(BorderFactory.createTitledBorder("Your Job Posts"));
 
         List<JobPost> jobPosts = postController.getJobPostsByRecruiter(recruiterUsername);
-        System.out.println("from jobpost ui: " + jobPosts);
         for (JobPost jobPost : jobPosts) {
             jobPostsModel.addRow(new Object[]{jobPost.getJobTitle(), "Open"});
         }
 
-        // event listener for table selection
+        // Selection listener for job posts table
         jobPostsTable.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 int selectedRow = jobPostsTable.getSelectedRow();
@@ -90,26 +80,14 @@ public class ManageJobPostsUI extends JFrame {
             }
         });
 
-        // Applicant panel
-        applicantsModel = new DefaultTableModel(new String[]{"Post Title", "Resume", "Questions", "Question Response", "Date Completed", "Status", "Hidden Row"}, 0) {
+        // Applicants table
+        applicantsModel = new DefaultTableModel(new String[]{"Post Title", "Resume", "Questions", "Question Response", "Date Completed", "Status", "Application ID"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-
-        // Applicant table with button column for accept/deny (this is just for rendering)
-        applicantsTable = new JTable(applicantsModel) {
-            @Override
-            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
-                if (column == 6) {
-                    JPanel panel = new JPanel();
-                    panel.add(new JLabel("Select a row and press Accept or Deny"));
-                    return panel;
-                }
-                return super.prepareRenderer(renderer, row, column);
-            }
-        };
+        applicantsTable = new JTable(applicantsModel);
         applicantsTable.getColumnModel().getColumn(6).setMinWidth(0);
         applicantsTable.getColumnModel().getColumn(6).setMaxWidth(0);
         applicantsTable.getColumnModel().getColumn(6).setWidth(0);
@@ -117,6 +95,7 @@ public class ManageJobPostsUI extends JFrame {
         JScrollPane applicantsScroll = new JScrollPane(applicantsTable);
         applicantsScroll.setBorder(BorderFactory.createTitledBorder("Applicants"));
 
+        // Button panel for accept/deny
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         acceptButton = new JButton("Accept");
         denyButton = new JButton("Deny");
@@ -136,56 +115,84 @@ public class ManageJobPostsUI extends JFrame {
 
     public void refreshApplicationTable(String jobTitle) {
         applicantsModel.setRowCount(0);
-        List<Application> applications = controller.getApplicationsByJobTitle(jobTitle);
-        for (Application app : applications) {
-            applicantsModel.addRow(new Object[]{
-                    app.getJobPostingTitle(),
-                    app.getResume(),
-                    app.getQuestions().toString(),
-                    app.getQuestionResponses().toString(),
-                    app.getDateCompleted(),
-                    app.getStatus().toString(),
-                    app
-            });
+        if (jobTitle == null || jobTitle.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Invalid job title.");
+            return;
+        }
+
+        try {
+            List<Application> applications = controller.getApplicationsByJobTitle(jobTitle);
+            if (applications.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No applications found for " + jobTitle);
+            }
+            for (Application app : applications) {
+                applicantsModel.addRow(new Object[]{
+                        app.getJobPostingTitle(),
+                        app.getResume(),
+                        app.getQuestions().toString(),
+                        app.getQuestionResponses().toString(),
+                        app.getDateCompleted(),
+                        app.getStatus().toString(),
+                        app.getApplicationId() // Store applicationId as String
+                });
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error fetching applications: " + e.getMessage());
         }
     }
+
     private void handleAccept() {
         int selectedRow = applicantsTable.getSelectedRow();
-        if (selectedRow != -1) {
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select an application.");
+            return;
+        }
+
+        try {
             int modelRow = applicantsTable.convertRowIndexToModel(selectedRow);
-            Application app = (Application) applicantsModel.getValueAt(modelRow, 6);  // Get the application from the model
-            controller.acceptApplication(app);
+            String applicationId = (String) applicantsModel.getValueAt(modelRow, 6); // Get applicationId
+            controller.acceptApplication(applicationId);
 
             applicantsModel.setValueAt(Application.Status.ACCEPTED.toString(), modelRow, 5);
-
-            System.out.println("Application Accepted!");
+            JOptionPane.showMessageDialog(this, "Application accepted successfully!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error accepting application: " + e.getMessage());
         }
     }
 
     private void handleDeny() {
         int selectedRow = applicantsTable.getSelectedRow();
-        if (selectedRow != -1) {
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select an application.");
+            return;
+        }
+
+        try {
             int modelRow = applicantsTable.convertRowIndexToModel(selectedRow);
-            Application app = (Application) applicantsModel.getValueAt(modelRow, 6);  // Get the application from the model
-            controller.denyApplication(app);
+            String applicationId = (String) applicantsModel.getValueAt(modelRow, 6); // Get applicationId
+            controller.denyApplication(applicationId);
 
             applicantsModel.setValueAt(Application.Status.DENIED.toString(), modelRow, 5);
-
-            System.out.println("Application Denied!");
+            JOptionPane.showMessageDialog(this, "Application denied successfully!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error denying application: " + e.getMessage());
         }
     }
 
     private void handleLogout() {
         this.dispose();
-        controller.routeToLogin();
+        router.showLoginInterface();
     }
 
     public void reloadJobPostsTable() {
         jobPostsModel.setRowCount(0);
-        List<JobPost> recruiterPosts = postController.getJobPostsByRecruiter(recruiterUsername);
-        for (JobPost post : recruiterPosts) {
-            jobPostsModel.addRow(new Object[]{post.getJobTitle(), "Open"});
+        try {
+            List<JobPost> recruiterPosts = postController.getJobPostsByRecruiter(recruiterUsername);
+            for (JobPost post : recruiterPosts) {
+                jobPostsModel.addRow(new Object[]{post.getJobTitle(), "Open"});
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error reloading job posts: " + e.getMessage());
         }
     }
-
 }

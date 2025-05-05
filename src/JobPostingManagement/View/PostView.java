@@ -1,13 +1,15 @@
 package JobPostingManagement.View;
 
-import JobApplicationManagement.View.ManageJobPostsUI;
+import JobApplicationManagement.Model.Application;
 import JobPostingManagement.Controller.PostController;
 import JobPostingManagement.Model.JobPost;
 import Main.InterfaceRouter;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 public class PostView extends JFrame {
     private JTextField postIDField, titleField, descriptionField, recruiterField, dateField, companyField, locationField, salaryField;
@@ -31,6 +33,7 @@ public class PostView extends JFrame {
 
     private void buildUI() {
         JPanel panel = new JPanel(new GridLayout(9, 2, 10, 10));
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         postIDField = new JTextField("Enter Post ID");
         titleField = new JTextField("Enter Job Title");
@@ -42,26 +45,71 @@ public class PostView extends JFrame {
         locationField = new JTextField("Enter Location");
         salaryField = new JTextField("Enter Salary");
 
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
-        JButton backButton = new JButton("Back");
+        backButton = new JButton("Back");
         backButton.addActionListener(e -> {
             this.dispose();
-            if (controller != null) {
+            try {
                 controller.showManageJobPostsInterface();
-            } else {
+            } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,
-                        "Navigation error: Controller not available",
+                        "Navigation error: " + ex.getMessage(),
                         "Error",
                         JOptionPane.ERROR_MESSAGE);
             }
         });
-
         bottomPanel.add(backButton);
 
-        add(bottomPanel, BorderLayout.SOUTH);
         submitButton = new JButton("Submit");
+        submitButton.addActionListener(e -> {
+            try {
+                String postID = postIDField.getText().trim();
+                String title = titleField.getText().trim();
+                String description = descriptionField.getText().trim();
+                String recruiter = recruiterField.getText().trim();
+                String date = dateField.getText().trim();
+                String company = companyField.getText().trim();
+                String location = locationField.getText().trim();
+                String salaryText = salaryField.getText().trim();
 
+                // Validate inputs
+                if (postID.isEmpty()) {
+                    throw new IllegalArgumentException("Post ID cannot be empty.");
+                }
+                if (title.isEmpty() || description.isEmpty() || recruiter.isEmpty() || date.isEmpty() ||
+                        company.isEmpty() || location.isEmpty() || salaryText.isEmpty()) {
+                    throw new IllegalArgumentException("All fields must be filled.");
+                }
+
+                // Validate date format
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                dateFormat.setLenient(false);
+                try {
+                    dateFormat.parse(date);
+                } catch (ParseException ex) {
+                    throw new IllegalArgumentException("Invalid date format. Please use YYYY-MM-DD.");
+                }
+
+                // Parse and validate salary
+                double salary = Double.parseDouble(salaryText);
+                if (salary < 0) {
+                    throw new IllegalArgumentException("Salary cannot be negative.");
+                }
+
+                // Create a new JobPost with an empty applications list
+                ArrayList<Application> applications = new ArrayList<>();
+                JobPost newPost = new JobPost(postID, title, description, recruiter, date, company, location, salary, applications);
+                controller.createJobPost(newPost);
+                JOptionPane.showMessageDialog(this, "Job Post Created!");
+                this.dispose();
+                controller.showManageJobPostsInterface();
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Invalid Salary format: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (IllegalArgumentException ex) {
+                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Failed to create Job Post: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
 
         panel.add(new JLabel("Post ID:")); panel.add(postIDField);
         panel.add(new JLabel("Job Title:")); panel.add(titleField);
@@ -71,52 +119,9 @@ public class PostView extends JFrame {
         panel.add(new JLabel("Company:")); panel.add(companyField);
         panel.add(new JLabel("Location:")); panel.add(locationField);
         panel.add(new JLabel("Salary:")); panel.add(salaryField);
-        panel.add(submitButton);
+        panel.add(new JLabel()); panel.add(submitButton);
 
-        add(panel);
-
-
-        submitButton.addActionListener((ActionEvent e) -> {
-            try {
-                String postID = postIDField.getText();
-                String title = titleField.getText();
-                String description = descriptionField.getText();
-                String recruiter = recruiterField.getText();
-                String date = dateField.getText();
-                String company = companyField.getText();
-                String location = locationField.getText();
-                double salary = Double.parseDouble(salaryField.getText());
-
-                JobPost newPost = new JobPost(postID, title, description, recruiter, date, company, location, salary);
-                boolean success = PostController.createJobPost(newPost);
-
-                if (success) {
-                    JOptionPane.showMessageDialog(this, "Job Post Created!");
-                    this.dispose();
-                    controller.showManageJobPostsInterface();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Failed to create Job Post.");
-                }
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
-            }
-        });
-    }
-
-    private void handleBack() {
-        try {
-            this.dispose();
-            controller.showManageJobPostsInterface();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this,
-                    "Navigation error: " + e.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            this.dispose();
-        }
+        add(panel, BorderLayout.CENTER);
+        add(bottomPanel, BorderLayout.SOUTH); // Fixed typo: changed 'bottomPanel' to 'bottomPanel'
     }
 }
-//    public static void main(String[] args) {
-//        SwingUtilities.invokeLater(PostView::new);
-//    }
-//}

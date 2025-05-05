@@ -5,37 +5,79 @@ import JobApplicationManagement.Subject;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
-
+import java.util.List;
 
 public class Application implements Subject {
-
-    public Application(Document doc) {
-    }
-
     public enum Status {
         ACCEPTED,
         DENIED,
         UNDER_CONSIDERATION
     }
-    private ArrayList<Observer> observers = new ArrayList<>();
-    ObjectId id;
-    int applicationID;
-    int postID;
-    String jobPostingTitle;
-    String resume;
-    ArrayList<String> questions;
-    ArrayList<String> questionResponses;
-    Date dateCompleted;
-    Status status;
 
-    public Application (int applicationID, int postID, String jobPostingTitle, String resume, ArrayList<String> questions, ArrayList<String> questionResponses, Date dateCompleted, Status status) {
+    private ArrayList<Observer> observers = new ArrayList<>();
+    private ObjectId id;
+    private int applicationID;
+    private String postID;
+    private String username; // New field to track the user
+    private String jobPostingTitle;
+    private String resume;
+    private ArrayList<String> questions;
+    private ArrayList<String> questionResponses;
+    private Date dateCompleted;
+    private Status status;
+
+    public Application(Document doc) {
+        this.id = doc.getObjectId("_id");
+        this.applicationID = doc.getInteger("applicationID");
+        // Handle postID as either String or Integer
+        Object postIdObj = doc.get("postID");
+        if (postIdObj instanceof String) {
+            this.postID = (String) postIdObj;
+        } else if (postIdObj instanceof Integer) {
+            this.postID = String.valueOf((Integer) postIdObj);
+        } else {
+            this.postID = "0";
+        }
+        this.username = doc.getString("username") != null ? doc.getString("username") : "";
+        this.jobPostingTitle = doc.getString("jobPostingTitle") != null ? doc.getString("jobPostingTitle") : "";
+        this.resume = doc.getString("resume") != null ? doc.getString("resume") : "";
+        // Handle questions as a List and convert to ArrayList<String>
+        this.questions = new ArrayList<>();
+        List<?> rawQuestions = doc.get("questions", List.class);
+        if (rawQuestions != null) {
+            for (Object question : rawQuestions) {
+                if (question instanceof String) {
+                    this.questions.add((String) question);
+                } else {
+                    System.err.println("Skipping invalid question in Application document: " + question);
+                }
+            }
+        }
+        // Handle questionResponses as a List and convert to ArrayList<String>
+        this.questionResponses = new ArrayList<>();
+        List<?> rawResponses = doc.get("questionResponses", List.class);
+        if (rawResponses != null) {
+            for (Object response : rawResponses) {
+                if (response instanceof String) {
+                    this.questionResponses.add((String) response);
+                } else {
+                    System.err.println("Skipping invalid question response in Application document: " + response);
+                }
+            }
+        }
+        this.dateCompleted = doc.getDate("dateCompleted");
+        String statusStr = doc.getString("status");
+        this.status = (statusStr != null && !statusStr.isEmpty()) ? Status.valueOf(statusStr) : Status.UNDER_CONSIDERATION;
+    }
+
+    public Application(int applicationID, String postID, String username, String jobPostingTitle, String resume, ArrayList<String> questions, ArrayList<String> questionResponses, Date dateCompleted, Status status) {
         this.applicationID = applicationID;
         this.postID = postID;
+        this.username = username;
         this.jobPostingTitle = jobPostingTitle;
-        this.resume = resume;
+        this.resume = this.resume;
         this.questions = new ArrayList<>(questions);
         this.questionResponses = new ArrayList<>(questionResponses);
         this.dateCompleted = dateCompleted;
@@ -43,28 +85,30 @@ public class Application implements Subject {
     }
 
     public Document toDocument() {
-        return new Document("applicationID", applicationID)
+        Document doc = new Document("applicationID", applicationID)
                 .append("postID", postID)
+                .append("username", username)
                 .append("jobPostingTitle", jobPostingTitle)
                 .append("resume", resume)
                 .append("questions", questions)
                 .append("questionResponses", questionResponses)
                 .append("dateCompleted", dateCompleted)
-                .append("status", status);
+                .append("status", status.toString());
+        if (id != null) {
+            doc.append("_id", id);
+        }
+        return doc;
     }
 
     public void addQuestion(String question) {
         questions.add(question);
     }
-    public void answerQuestion() {
-
-        String response = ""; // placeholder
-        questionResponses.add(response);
-    }
 
     public void printApplicationDetails() {
         System.out.println("Application ID: " + applicationID);
+        System.out.println("MongoDB ID: " + (id != null ? id.toString() : "Not set"));
         System.out.println("Post ID: " + postID);
+        System.out.println("Username: " + username);
         System.out.println("Job Posting Title: " + jobPostingTitle);
         System.out.println("Resume: " + resume);
         System.out.println("Date Completed: " + dateCompleted);
@@ -93,31 +137,40 @@ public class Application implements Subject {
 
     @Override
     public void notifyObservers() {
-        for (Observer observer: observers) {
+        for (Observer observer : observers) {
             observer.update(this);
         }
     }
 
-    // when application is denied, notifies observers
     public void setDenied() {
         this.status = Status.DENIED;
         notifyObservers();
     }
 
-    // // when application is accepted, notifies observers
     public void setAccepted() {
         this.status = Status.ACCEPTED;
         notifyObservers();
     }
 
-    // GETTERS:
-    public ObjectId getObjectId() { return id;}
+    // GETTERS
+    public String getApplicationId() {
+        return id != null ? id.toString() : null;
+    }
+
+    public ObjectId getObjectId() {
+        return id;
+    }
+
     public int getApplicationID() {
         return applicationID;
     }
 
-    public int getPostID() {
+    public String getPostID() {
         return postID;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public String getJobPostingTitle() {
@@ -144,7 +197,7 @@ public class Application implements Subject {
         return status;
     }
 
-    //SETTERS
+    // SETTERS
     public void setId(ObjectId id) {
         this.id = id;
     }

@@ -3,148 +3,147 @@ package DatabaseManagement;
 import JobApplicationManagement.Model.Application;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Indexes;
+import com.mongodb.client.model.Updates;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class ApplicationRepository {
-    private static final String uri = "mongodb+srv://jeffta1080:y7BctXVKdenQAMOu@vocationalguidance.5ybuj6p.mongodb.net/?retryWrites=true&w=majority&appName=VocationalGuidance";
-    private static final MongoClient mongoClient = MongoClients.create(uri);
+
+    private static final String DATABASE_NAME = "jobposts";
+    private static final String COLLECTION_NAME = "applications";
+
+    static {
+        // Create an index on the username field for faster queries
+        MongoDatabase db = MongoClientManager.getMongoClient().getDatabase(DATABASE_NAME);
+        MongoCollection<Document> collection = db.getCollection(COLLECTION_NAME);
+        collection.createIndex(Indexes.ascending("username"));
+        // Additional index on jobPostingTitle for getApplicationsByJobTitle
+        collection.createIndex(Indexes.ascending("jobPostingTitle"));
+    }
 
     public static void insertApplication(Application application) {
-        try {
-            MongoDatabase db = mongoClient.getDatabase("applications");
-            MongoCollection<Document> applicationsCollection = db.getCollection("applications");
-
-            Document applicationDoc = application.toDocument();
-            applicationsCollection.insertOne(applicationDoc);
-            System.out.println("Application inserted successfully!");
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (application == null) {
+            throw new IllegalArgumentException("Application cannot be null");
         }
-    }
-
-    public static void submitApplication(Application application) {
-        insertApplication(application);  // Insert the application into the database
-    }
-
-    public static List<Application> getAllApplications() {
-        List<Application> applicationsList = new ArrayList<>();
-
-        try {
-            MongoDatabase db = mongoClient.getDatabase("applications");
-            MongoCollection<Document> applicationsCollection = db.getCollection("applications");
-
-            FindIterable<Document> applications = applicationsCollection.find();
-
-            for (Document doc : applications) {
-                Application app = new Application(
-                        doc.getInteger("applicationID"),
-                        doc.getInteger("postID"),
-                        doc.getString("jobPostingTitle"),
-                        doc.getString("resume"),
-                        (ArrayList<String>) doc.get("questions"),
-                        (ArrayList<String>) doc.get("questionResponses"),
-                        doc.getDate("dateCompleted"),
-                        Application.Status.valueOf(doc.getString("status"))
-                );
-                ObjectId generatedId = doc.getObjectId("_id");
-                app.setId(generatedId);
-                applicationsList.add(app);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (application.getUsername() == null || application.getUsername().trim().isEmpty()) {
+            throw new IllegalArgumentException("Application username cannot be null or empty");
         }
-        return applicationsList;
-    }
 
-    public static void acceptApplication(String id) {
         try {
-            MongoDatabase db = mongoClient.getDatabase("applications");
-            MongoCollection<Document> applicationsCollection = db.getCollection("applications");
+            MongoDatabase db = MongoClientManager.getMongoClient().getDatabase(DATABASE_NAME);
+            MongoCollection<Document> collection = db.getCollection(COLLECTION_NAME);
 
-            Document query = new Document("_id", new ObjectId(id));
-            Document update = new Document("$set", new Document("status", "ACCEPTED"));
-
-            applicationsCollection.updateOne(query, update);
-
-            System.out.println("Application with ID " + id + " has been accepted.");
+            Document doc = application.toDocument();
+            collection.insertOne(doc);
+            application.setId(doc.getObjectId("_id"));
         } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void denyApplication(String id) {
-        try {
-            MongoDatabase db = mongoClient.getDatabase("applications");
-            MongoCollection<Document> applicationsCollection = db.getCollection("applications");
-
-            Document query = new Document("_id", new ObjectId(id));
-            Document update = new Document("$set", new Document("status", "DENIED"));
-
-            applicationsCollection.updateOne(query, update);
-
-            System.out.println("Application with ID " + id + " has been denied.");
-        } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException("Failed to insert application: " + e.getMessage(), e);
         }
     }
 
     public static List<Application> getApplicationsByUsername(String username) {
-        List<Application> userApps = new ArrayList<>();
-
-        MongoDatabase db = mongoClient.getDatabase("applications");
-        MongoCollection<Document> collection = db.getCollection("applications");
-        FindIterable<Document> applications = collection.find(Filters.eq("username", username));
-
-        for (Document doc : applications) {
-            Application app = new Application(
-                    doc.getInteger("applicationID"),
-                    doc.getInteger("postID"),
-                    doc.getString("jobPostingTitle"),
-                    doc.getString("resume"),
-                    (ArrayList<String>) doc.get("questions"),
-                    (ArrayList<String>) doc.get("questionResponses"),
-                    doc.getDate("dateCompleted"),
-                    Application.Status.valueOf(doc.getString("status"))
-            );
-            userApps.add(app);
+        if (username == null || username.trim().isEmpty()) {
+            throw new IllegalArgumentException("Username cannot be null or empty");
         }
-        System.out.println(userApps);
-        return userApps;
+
+        List<Application> applications = new ArrayList<>();
+        try {
+            MongoDatabase db = MongoClientManager.getMongoClient().getDatabase(DATABASE_NAME);
+            MongoCollection<Document> collection = db.getCollection(COLLECTION_NAME);
+
+            FindIterable<Document> docs = collection.find(Filters.eq("username", username));
+            for (Document doc : docs) {
+                applications.add(new Application(doc));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch applications for user " + username + ": " + e.getMessage(), e);
+        }
+        return applications;
     }
 
     public static List<Application> getApplicationsByJobTitle(String jobTitle) {
-        List<Application> matchingApps = new ArrayList<>();
-        System.out.println("job title:" + jobTitle);
-
-        MongoDatabase db = mongoClient.getDatabase("applications");
-        MongoCollection<Document> collection = db.getCollection("applications");
-
-        FindIterable<Document> applications = collection.find(
-                Filters.regex("jobPostingTitle", Pattern.compile("^" + Pattern.quote(jobTitle) + "$", Pattern.CASE_INSENSITIVE))
-        );
-
-        for (Document doc : applications) {
-            Application app = new Application(
-                    doc.getInteger("applicationID"),
-                    doc.getInteger("postID"),
-                    doc.getString("jobPostingTitle"),
-                    doc.getString("resume"),
-                    (ArrayList<String>) doc.get("questions"),
-                    (ArrayList<String>) doc.get("questionResponses"),
-                    doc.getDate("dateCompleted"),
-                    Application.Status.valueOf(doc.getString("status"))
-            );
-            System.out.println("did this run");
-            matchingApps.add(app);
+        if (jobTitle == null || jobTitle.trim().isEmpty()) {
+            throw new IllegalArgumentException("Job title cannot be null or empty");
         }
-        System.out.println(matchingApps);
-        return matchingApps;
+
+        List<Application> applications = new ArrayList<>();
+        try {
+            MongoDatabase db = MongoClientManager.getMongoClient().getDatabase(DATABASE_NAME);
+            MongoCollection<Document> collection = db.getCollection(COLLECTION_NAME);
+
+            FindIterable<Document> docs = collection.find(Filters.eq("jobPostingTitle", jobTitle));
+            for (Document doc : docs) {
+                applications.add(new Application(doc));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch applications for job title " + jobTitle + ": " + e.getMessage(), e);
+        }
+        return applications;
+    }
+
+    public static boolean deleteApplication(String applicationId) {
+        if (applicationId == null || applicationId.trim().isEmpty()) {
+            throw new IllegalArgumentException("Application ID cannot be null or empty");
+        }
+
+        try {
+            MongoDatabase db = MongoClientManager.getMongoClient().getDatabase(DATABASE_NAME);
+            MongoCollection<Document> collection = db.getCollection(COLLECTION_NAME);
+
+            Document result = collection.findOneAndDelete(Filters.eq("_id", new ObjectId(applicationId)));
+            return result != null; // Return true if an application was deleted, false if not found
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to delete application with ID " + applicationId + ": " + e.getMessage(), e);
+        }
+    }
+
+    public static void acceptApplication(String applicationId) {
+        if (applicationId == null || applicationId.trim().isEmpty()) {
+            throw new IllegalArgumentException("Application ID cannot be null or empty");
+        }
+
+        try {
+            MongoDatabase db = MongoClientManager.getMongoClient().getDatabase(DATABASE_NAME);
+            MongoCollection<Document> collection = db.getCollection(COLLECTION_NAME);
+
+            Document result = collection.findOneAndUpdate(
+                    Filters.eq("_id", new ObjectId(applicationId)),
+                    Updates.set("status", Application.Status.ACCEPTED.toString())
+            );
+            if (result == null) {
+                throw new IllegalStateException("Application with ID " + applicationId + " not found");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to accept application with ID " + applicationId + ": " + e.getMessage(), e);
+        }
+    }
+
+    public static void denyApplication(String applicationId) {
+        if (applicationId == null || applicationId.trim().isEmpty()) {
+            throw new IllegalArgumentException("Application ID cannot be null or empty");
+        }
+
+        try {
+            MongoDatabase db = MongoClientManager.getMongoClient().getDatabase(DATABASE_NAME);
+            MongoCollection<Document> collection = db.getCollection(COLLECTION_NAME);
+
+            Document result = collection.findOneAndUpdate(
+                    Filters.eq("_id", new ObjectId(applicationId)),
+                    Updates.set("status", Application.Status.DENIED.toString())
+            );
+            if (result == null) {
+                throw new IllegalStateException("Application with ID " + applicationId + " not found");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to deny application with ID " + applicationId + ": " + e.getMessage(), e);
+        }
+    }
+
+    public static void closeClient() {
+        MongoClientManager.closeClient();
     }
 }

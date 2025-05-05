@@ -33,7 +33,7 @@ public class Mongo_DB {
             }
 
             // Testing Application Connectivity
-            ApplicationRepository.getAllApplications();
+            //ApplicationRepository.getApplicationsByUsernam
 
         } catch(Exception e) {
             e.printStackTrace();
