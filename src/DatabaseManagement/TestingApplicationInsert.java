@@ -12,12 +12,12 @@ public class TestingApplicationInsert {
     public static void main(String[] args) {
 
         Application dummyApp = new Application(
-                1,
+                2,
                 1001,
                 "testing jobs",
                 "resume.pdf",
                 new ArrayList<>(Arrays.asList("Why do you want this job?")),
-                new ArrayList<>(Arrays.asList("Because I love coding!")),
+                new ArrayList<>(Arrays.asList("Need money")),
                 new Date(),
                 Application.Status.UNDER_CONSIDERATION
         );
